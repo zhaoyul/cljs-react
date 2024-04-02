@@ -1,0 +1,51 @@
+<svg version="1.1" baseProfile="full" width="550.25" height="270" viewbox="0 0 550.25 270" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events" style="font-weight:bold; font-size:12pt; font-family:'Calibri', Helvetica, sans-serif;;stroke-width:3;stroke-linejoin:round;stroke-linecap:round">
+  <title >nomnoml</title>
+  <desc >
+[()]-&gt;[defn]
+[()]-&gt;[map-&gt;query-string]
+[()]-&gt;[\[\]]
+[\[\]]-&gt;[m]
+[()]-&gt;[reduce]
+[reduce]-&gt;[fn]
+[reduce]-&gt;[&quot;&quot;]
+[reduce]-&gt;[m]
+[fn]-&gt;[...]
+
+</desc>
+  <path d="M252.3 31.7 L40.5 64.5 L40.5 84.5 L40.5 84.5 " style="stroke:#33322E;fill:none;stroke-dasharray:none;"></path>
+  <path d="M35.2 71.2 L40.5 77.8 L45.8 71.2 L40.5 84.5 Z" style="stroke:#33322E;fill:#33322E;stroke-dasharray:none;"></path>
+  <path d="M252.3 37.5 L196.5 64.5 L196.5 84.5 L196.5 84.5 " style="stroke:#33322E;fill:none;stroke-dasharray:none;"></path>
+  <path d="M191.2 71.2 L196.5 77.8 L201.8 71.2 L196.5 84.5 Z" style="stroke:#33322E;fill:#33322E;stroke-dasharray:none;"></path>
+  <path d="M287.3 37.5 L343 64.5 L343 84.5 L343 84.5 " style="stroke:#33322E;fill:none;stroke-dasharray:none;"></path>
+  <path d="M337.7 71.2 L343 77.8 L348.3 71.2 L343 84.5 Z" style="stroke:#33322E;fill:#33322E;stroke-dasharray:none;"></path>
+  <path d="M343 115.5 L343 135.5 L354.3 155.5 L354.3 155.5 " style="stroke:#33322E;fill:none;stroke-dasharray:none;"></path>
+  <path d="M343.1 146.5 L351 149.7 L352.4 141.3 L354.3 155.5 Z" style="stroke:#33322E;fill:#33322E;stroke-dasharray:none;"></path>
+  <path d="M287.3 32.5 L445.3 64.5 L445.3 84.5 L445.3 84.5 " style="stroke:#33322E;fill:none;stroke-dasharray:none;"></path>
+  <path d="M439.9 71.2 L445.3 77.8 L450.6 71.2 L445.3 84.5 Z" style="stroke:#33322E;fill:#33322E;stroke-dasharray:none;"></path>
+  <path d="M445.3 115.5 L445.3 135.5 L445.3 155.5 L445.3 155.5 " style="stroke:#33322E;fill:none;stroke-dasharray:none;"></path>
+  <path d="M439.9 142.2 L445.3 148.8 L450.6 142.2 L445.3 155.5 Z" style="stroke:#33322E;fill:#33322E;stroke-dasharray:none;"></path>
+  <path d="M478 115.5 L520.3 135.5 L520.3 155.5 L520.3 155.5 " style="stroke:#33322E;fill:none;stroke-dasharray:none;"></path>
+  <path d="M514.9 142.2 L520.3 148.8 L525.6 142.2 L520.3 155.5 Z" style="stroke:#33322E;fill:#33322E;stroke-dasharray:none;"></path>
+  <path d="M421.1 115.5 L390 135.5 L374.8 155.5 L374.8 155.5 " style="stroke:#33322E;fill:none;stroke-dasharray:none;"></path>
+  <path d="M378.6 141.7 L378.8 150.2 L387.1 148.1 L374.8 155.5 Z" style="stroke:#33322E;fill:#33322E;stroke-dasharray:none;"></path>
+  <path d="M445.3 186.5 L445.3 206.5 L445.3 226.5 L445.3 226.5 " style="stroke:#33322E;fill:none;stroke-dasharray:none;"></path>
+  <path d="M439.9 213.2 L445.3 219.8 L450.6 213.2 L445.3 226.5 Z" style="stroke:#33322E;fill:#33322E;stroke-dasharray:none;"></path>
+  <rect x="252.5" y="13.5" height="31" width="35" style="stroke:#33322E;fill:#eee8d5;stroke-dasharray:none;"></rect>
+  <text x="270" y="35" style="fill: #33322E;text-anchor: middle;">()</text>
+  <rect x="13.5" y="84.5" height="31" width="54" style="stroke:#33322E;fill:#eee8d5;stroke-dasharray:none;"></rect>
+  <text x="40.5" y="106" style="fill: #33322E;text-anchor: middle;">defn</text>
+  <rect x="107.5" y="84.5" height="31" width="178" style="stroke:#33322E;fill:#eee8d5;stroke-dasharray:none;"></rect>
+  <text x="196.5" y="106" style="fill: #33322E;text-anchor: middle;">map-&gt;query-string</text>
+  <rect x="325.5" y="84.5" height="31" width="35" style="stroke:#33322E;fill:#eee8d5;stroke-dasharray:none;"></rect>
+  <text x="343" y="106" style="fill: #33322E;text-anchor: middle;">[]</text>
+  <rect x="350.5" y="155.5" height="31" width="26" style="stroke:#33322E;fill:#eee8d5;stroke-dasharray:none;"></rect>
+  <text x="363.5" y="177" style="fill: #33322E;text-anchor: middle;">m</text>
+  <rect x="408.5" y="84.5" height="31" width="73" style="stroke:#33322E;fill:#eee8d5;stroke-dasharray:none;"></rect>
+  <text x="445" y="106" style="fill: #33322E;text-anchor: middle;">reduce</text>
+  <rect x="427.5" y="155.5" height="31" width="35" style="stroke:#33322E;fill:#eee8d5;stroke-dasharray:none;"></rect>
+  <text x="445" y="177" style="fill: #33322E;text-anchor: middle;">fn</text>
+  <rect x="502.5" y="155.5" height="31" width="35" style="stroke:#33322E;fill:#eee8d5;stroke-dasharray:none;"></rect>
+  <text x="520" y="177" style="fill: #33322E;text-anchor: middle;">&quot;&quot;</text>
+  <rect x="422.5" y="226.5" height="31" width="45" style="stroke:#33322E;fill:#eee8d5;stroke-dasharray:none;"></rect>
+  <text x="445" y="248" style="fill: #33322E;text-anchor: middle;">...</text>
+</svg>

@@ -1,0 +1,14 @@
+{
+    "name": "first-project",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "private": true,
+    "devDependencies": {
+	"shadow-cljs": "^2.10.15"
+    },
+    "scripts": {
+	    "w:script": "shadow-cljs watch :script",
+	    "r:script": "shadow-cljs release :script"
+    }
+}

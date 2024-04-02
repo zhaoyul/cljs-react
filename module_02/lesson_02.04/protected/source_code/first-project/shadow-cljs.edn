@@ -1,0 +1,6 @@
+{:source-paths ["src" "resources"]
+ :dependencies []
+ :nrepl {:port 9000}
+ :builds {:script {:target :node-script
+                   :main first-project.core/main
+                   :output-to "build/node-script/core.js"}}}

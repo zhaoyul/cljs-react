@@ -1,0 +1,39 @@
+{:builds
+ {:app {:asset-path "/js"
+        :module-loader true
+        :modules {:main {:init-fn app.core/main}
+                  :login {:entries [app.pages.login]
+                          :depends-on #{:main}}
+                  :register {:entries [app.pages.register]
+                             :depends-on #{:main}}
+                  :graphics {:entries [app.pages.graphics
+                                       app.pages.graphics.detail]
+                             :depends-on #{:main}}}
+        :devtools {:preloads [re-frisk.preload]}
+        :output-dir "public/js"
+        :target :browser
+        :closure-defines {app.core/app-env #shadow/env "APP_ENV"}
+        }
+  :cards {:asset-path "/js"
+          :modules {:main {:init-fn app.cards/main}}
+          :compiler-options {:devcards true}
+          :output-dir "public/js"
+          :target :browser}
+  :test {:ns-regexp "app.cards"
+         :output-to "out/test.js"
+         :target :node-test}
+  :e2e {:ns-regexp "e2e.*"
+        :output-to "out/e2e.js"
+        :target :node-test}}
+ :dependencies [[reagent "0.10.0"]
+                [re-frame "1.1.1"]
+                [re-frisk "1.3.4"]
+                [devcards "0.2.6"]
+
+                ;; for Emacs users only! ;;;
+                [cider/cider-nrepl "0.25.2"]
+                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                ]
+ :dev-http {3000 "public"}
+ :nrepl {:port 3333}
+ :source-paths ["src"]}

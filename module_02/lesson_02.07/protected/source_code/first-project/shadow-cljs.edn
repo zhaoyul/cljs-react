@@ -1,0 +1,9 @@
+{:source-paths ["src" "resources"]
+ :dependencies [;; for Emacs users only! ;;;
+                [cider/cider-nrepl "0.25.2"]
+                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                ]
+ :nrepl {:port 9000}
+ :builds {:script {:target :node-script
+                   :main first-project.core/main
+                   :output-to "build/node-script/core.js"}}}
