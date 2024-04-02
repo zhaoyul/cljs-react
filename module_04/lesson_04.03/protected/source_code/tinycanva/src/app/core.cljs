@@ -1,7 +1,8 @@
 (ns app.core
   "This namespace contains your application and is the entrypoint for 'yarn start'."
   (:require [reagent.core :as r]
-            ["react-router-dom" :refer (BrowserRouter Switch Route)]
+            [reagent.dom :as dom]
+            ["react-router-dom" :refer (BrowserRouter Route Routes)]
             ))
 
 
@@ -15,21 +16,21 @@
 
 (defn root-router []
   [:> BrowserRouter
-   [:> Switch
-    ;; [:> Route {:exact true :path "/" :component reactified-placeholder}]
-    [:> Route {:exact true :path "/"} [placeholder "Index"]]
-    [:> Route {:path "/login"} [placeholder "Login"]]
-    [:> Route {:path "/register"} [placeholder "Register"]]
-    [:> Route {:path "/graphics"} [placeholder "Graphics List"]]
+   [:> Routes
+    ;; 使用element属性并去掉exact属性
+    [:> Route {:path "/"      :element   (r/as-element [placeholder "Index"])}]
+    [:> Route {:path "/login" :element    (r/as-element [placeholder "Login"])}]
+    [:> Route {:path "/register" :element (r/as-element [placeholder "Register"])}]
+    [:> Route {:path "/graphics" :element (r/as-element [placeholder "Graphics List"])}]
 
-    ;; catch all
-    [:> Route [placeholder "404 Not Found"]]
+    ;; catch all - 使用"*"作为路径匹配任何未匹配的路由
+    [:> Route {:path "*" :component [placeholder "404 Not Found"]}]
     ]])
 
 (defn ^:dev/after-load render
   "Render the toplevel component for this app."
   []
-  (r/render [root-router] (.getElementById js/document "app")))
+  (dom/render [root-router] (.getElementById js/document "app")))
 
 (defn ^:export main
   "Run application startup logic."
