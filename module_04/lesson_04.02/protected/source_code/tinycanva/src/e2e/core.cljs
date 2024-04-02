@@ -5,11 +5,13 @@
             ["serve-handler" :as serve-handler]
             ["taiko" :refer [openBrowser goto closeBrowser text diagnostics]]))
 
-; Serve public/ on a static server.
+(def port 5977)
+
+;; Serve public/ on a static server.
 (use-fixtures
   :once
   (let [server (.createServer http #(serve-handler %1 %2 #js {:public "public/"}))]
-    {:before #(.listen server 5000)
+    {:before #(.listen server port)
      :after #(.close server)}))
 
 ; Change debug to true to see the browser performing actions.
@@ -21,15 +23,15 @@
 (deftest app-works
   (let [test-string "is running!"]
     (async done
-           (->
-             (openBrowser browser-opts)
-             (.then #(.logConsoleInfo diagnostics))
-             (.then #(.on %1 "logEntry" (fn [log] (is (not (= (.-level log) "error"))
-                                                      (str "Should not log errors: "
-                                                           (js/JSON.stringify log))))))
-             (.then #(goto "http://localhost:5000"))
-             (.then #(.exists (text test-string)))
-             (.then #(is % (str "Text '" test-string "' should exist in page")))
-             (.catch #(is false "Should not have thrown errors"))
-             (.finally #(closeBrowser))
-             (.then #(done))))))
+      (->
+       (openBrowser browser-opts)
+       (.then #(.logConsoleInfo diagnostics))
+       (.then #(.on %1 "logEntry" (fn [log] (is (not (= (.-level log) "error"))
+                                                (str "Should not log errors: "
+                                                     (js/JSON.stringify log))))))
+       (.then #(goto (str "http://localhost:" port)))
+       (.then #(.exists (text test-string)))
+       (.then #(is % (str "Text '" test-string "' should exist in page")))
+       (.catch #(is false "Should not have thrown errors"))
+       (.finally #(closeBrowser))
+       (.then #(done))))))
