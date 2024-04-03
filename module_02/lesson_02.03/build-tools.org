@@ -1,0 +1,52 @@
+#+TITLE: 项目管理工具
+
+
+
+在探索Clojure构建工具和包管理时, 我们了解到Clojure作为一种托管语言, 可以接入其他语言的生态系统, 这带来了多种不同生态系统的构建工具.
+
+对于初学者来说, 选择合适的构建工具可能会有些困难, 因为可能不了解各自的优缺点. 在这个模块中, 我们了解了Clojure构建工具的一般状态, 并为我们的项目选择了合适的工具.
+
+我们使用最多的是lein和shadow-cljs
+
+** Leiningen
+Leiningen是Clojure最古老且最成熟的构建工具之一, 它不仅仅是一个构建工具, 还允许我们定义依赖和项目特定的任务. 你可以将Leiningen视为Clojure生态系统中的NPM或Yarn.
+
+Leiningen的优势包括：
+- 从Maven仓库加载JVM依赖
+- 使用自定义的CLJSJS仓库加载JavaScript依赖
+- 帮助将Clojure打包成JVM或JS应用
+- 运行Clojure REPL
+- 支持Clojure CLR
+
+Leiningen的唯一缺点是它为每个应用运行一个新的JVM实例, 如果你的产品由多个Clojure应用组成, 这可能会变得资源密集.
+
+** Boot
+Boot在作用范围上与Leiningen相似, 但有一个关键区别：Boot只运行一个JVM实例, 这导致更好的资源利用.
+
+Boot的缺点是配置冗长, 对于较小的项目来说不是很有帮助.
+
+### Deps CLI
+Deps CLI是官方的构建工具, 旨在成为Leiningen和Boot的替代品. Leiningen和Boot是包含电池的构建工具, 而Deps CLI更多是DIY. Deps CLI允许你控制.jar文件的生产, 从Maven加载依赖, 并定义应用的各种目标（测试、生产、预发布等）.
+
+它更加多功能, 但需要你付出更多的努力.
+
+上述所有工具都集中在JVM生态系统上, 但它们可以被调整以适应JavaScript. 如果你在JVM上开发Clojure应用, 选择这三个工具中的任何一个都不会错. Lein和Boot功能丰富, Deps CLI虽然更简约但更可配置. 我们的建议是使用Deps CLI.
+
+我们迄今为止一直在使用的 ~clj~ 命令是Deps CLI的一部分.
+
+** Shadow-cljs
+Shadow是一个相对较新的构建工具, 专注于JavaScript生态系统. 它的新颖之处在于它位于npm项目旁边, 允许你直接从npm包含包.
+
+就像其他构建工具一样, 它可以：
+- 将ClojureScript打包成JavaScript
+- 运行REPL
+- 从NPM加载包
+
+但与其他工具不同, 它还可以帮助进行代码分割、动态模块导入和热重载. Shadow CLJS针对ClojureScript开发.
+
+如果你打算开发ClojureScript应用, 我们强烈推荐使用Shadow CLJS. 本课程将使用Shadow CLJS, 但基本原则保持不变, 并且可以应用于此列表中的所有工具.
+
+** Figwheel
+虽然Figwheel不完全是一个构建工具, 但值得一提. Figwheel是Leiningen的一个实用工具包. 它通过为基于Lein的项目带来如热重载JavaScript等功能, 使ClojureScript开发变得更加容易.
+
+通过这一讨论, 我们对Clojure的构建工具和包管理有了全面的了解, 这为我们的Clojure或ClojureScript项目选择适当的工具和方法提供了指导.
