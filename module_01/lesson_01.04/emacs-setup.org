@@ -1,0 +1,75 @@
+#+TITLE: Emacs设置
+#+SLUG: getting-started-emacs-setup
+#+DESCRIPTION: 为Clojure开发设置Emacs。
+#+isPublicLesson: true
+#+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
+
+* Emacs设置
+
+Emacs是最受欢迎的Clojure编辑器. 其背后的一个原因是它的LISPy根源.
+
+有多种方式来安装这些包.
+
+1. copy 同事的配置文件
+2. 最简单设置，推荐[[https://github.com/purcell/emacs.d][purcell的.emacs.d配置]]
+3. 从头开始, 以下是从头开始的步骤.
+
+我们可以安装所需的包. 您可能需要将此配置添加到`init.el`文件中. 要让Clojure与Emacs协同工作，我们需要以下包：
+
+- [[https://www.flycheck.org/en/latest/][flycheck]]
+#+begin_src elisp
+(use-package flycheck
+  :init (global-flycheck-mode))
+
+;; 首先安装包，然后在`clojure-mode'加载时安装检查器
+(use-package flycheck-clj-kondo)
+#+end_src
+
+- [[https://github.com/clojure-emacs/clojure-mode][clojure-mode]]
+#+begin_src elisp
+(use-package clojure-mode
+  :config
+  (require 'flycheck-clj-kondo))
+#+end_src
+
+- [[https://github.com/clojure-emacs/cider][cider]]
+#+begin_src elisp
+(use-package cider
+  :defer t
+  :init
+  (progn
+    (add-hook 'clojure-mode-hook 'cider-mode)
+    (add-hook 'clojurescript-mode-hook 'cider-mode)
+    (add-hook 'clojurec-mode-hook 'cider-mode)
+    (add-hook 'cider-repl-mode-hook 'cider-mode))
+  :config
+  (setq cider-repl-display-help-banner nil)
+  (setq cider-auto-mode nil))
+#+end_src
+
+- ([[https://www.emacswiki.org/emacs/RainbowDelimiters][rainbow-delimeters]]
+#+begin_src elisp
+(use-package rainbow-delimiters
+  :defer t
+  :init
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+#+end_src
+- [paredit](https://www.emacswiki.org/emacs/ParEdit)
+#+begin_src elisp
+(use-package paredit
+  :defer t
+  :init
+  (progn
+    (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+    (add-hook 'clojure-mode-hook 'paredit-mode)
+    (add-hook 'clojurescript-mode-hook 'paredit-mode)
+    (add-hook 'clojurec-mode-hook 'paredit-mode)
+    (add-hook 'cider-repl-mode-hook 'paredit-mode)))
+#+end_src
+- [[https://github.com/borkdude/flycheck-clj-kondo][flycheck-clj-kondo]]
+#+begin_src elisp
+(use-package flycheck-clj-kondo)
+#+end_src
+
+** 继续调整
+这个设置是一个很好的起点. emacs的旅途漫长, 希望你有经验与我们分享.
