@@ -1,0 +1,50 @@
+#+TITLE: Clojure语言是托管的
+#+SLUG: language-semantics-hosted-nature
+#+DESCRIPTION: Clojure既不是编译型语言, 也没有自己的虚拟机. 相反, 它运行在其他语言的虚拟机上. 在本课中, 我们将了解官方和非官方的端口及支持状态.
+#+isPublicLesson: true
+#+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
+
+
+
+像C、C++这样的语言编译为目标代码, 而像Java和.NET这样的语言运行在虚拟机上. TypeScript这类的语言会转译(transpile)成另一种语言.
+
+Clojure是一种设计为托管的语言, 即运行在其他语言的虚拟机上. 这允许利用现有的生态系统.
+
+ClojureScript与Clojure和ClojureCLR略有不同, 因为它转译为JavaScript, 而其他两个产生字节码. 虽然ClojureScript产生的JavaScript代码是人类可读的, 但手动修改这些代码并不是常见的做法.
+
+** 官方和社区端口
+针对JVM、JavaScript和CLR的Clojure由Clojure的创建者官方支持. 这些端口的名称和目标是:
+- Clojure - 运行于JVM
+- ClojureCLR - 针对.NET, 运行与IL
+- ClojureScript - 针对JavaScript, 转译
+
+Clojure产生.jar文件, 而ClojureCLR产生.dll文件.
+
+还有其他针对其他运行时的Clojure社区端口. 一些值得注意的方言包括：
+
+- Babashka - graalvm
+- Joker - 运行于Go
+- Ferret - 针对ISO C++
+- Clojurerl - 针对Erlang VM
+- clojreRS - 针对Rust
+- ClojureDart - dart语言, 用于flutter开发
+
+更广泛的方言列表可在 [[https://github.com/chr15m/awesome-clojure-likes][chr15m/awesome-clojure-likes]] 找到
+
+非官方端口通常只实现语言的一个子集. 除非另有说明, 任何提到"Clojure端口"只包括官方端口.
+
+** Clojure方言的差异
+Clojure在保持端口之间的统一核心方面做得非常出色. 但由于宿主的性质, 一些差异会显现出来.
+
+例如, ClojureScript（JS端口）是单线程的, 因为JavaScript是单线程的. 除了语言级别的差异外, Clojure方言在所有运行时中基本一致.
+
+** 透明的互操作
+任何JVM、Node或CLR包可以被Clojure透明地使用. Clojure数据类型就是宿主的数据类型, 即在Clojure中, 一个字符串是`java.lang.String`, 而在ClojureScript中, 一个字符串是JavaScript的`String`.
+
+** 读者条件（或Clojure Common或.cljc）
+Clojure Common是一个概念, 它允许你用相同的代码针对多个Clojure运行时. 这个概念是Clojure实现“一次编写, 到处运行”的想法. 这个主题很广泛, 不在本课程的范围内.
+
+可以在 [[https://clojure.org/guides/reader_conditionals][官方文档页面]] 阅读更多关于读者条件的信息. 我们不会在本课程中针对多个运行时.
+
+** 结论
+我们了解了Clojure如何在不同的宿主上运行, 以及可用的官方和非官方端口. 我们还提到了Clojure数据结构就是宿主的数据结构的事实. 我们很快就会动手实践.
