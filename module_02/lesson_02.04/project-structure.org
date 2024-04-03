@@ -1,0 +1,230 @@
+#+TITLE: 项目结构
+#+SLUG: language-semantics-project-structure
+#+DESCRIPTION: 已经够多的讨论了，让我们创建一个新的仓库并从零开始使用Shadow CLJS设置一个项目.
+#+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
+
+
+在过去的几节课中, 我们了解了语言和构建工具. 现在我们准备好创建我们的第一个项目.
+
+S-表达式有点奇怪. 但不用担心, 我们很快就会学习如何使用Paredit, 这是一个帮助管理S-表达式的工具.
+
+** Shadow CLJS项目
+所有项目都从一个配置文件开始. 文件的名称和语法对不同的构建工具而言是不同的. 然而, 理念是相同的. 如果你理解了一个构建工具, 你就可以轻松使用所有其他工具.
+
+对于Shadow CLJS(或Shadow), 这个文件被称为 ~shadow-cljs.edn~. Edn代表可扩展数据表示法. 它是一种类似于JSON的格式.
+
+Shadow项目是NPM和CLJS项目的混合体, 所以你还需要一个 ~package.json~ 文件. 这允许我们直接安装NPM包.
+
+有多种工具可以为你的项目搭建脚手架, 但为了深入了解事物的工作原理, 我们将手动设置Shadow项目. 习惯了Shadow配置将帮助我们稍后开始使用诸如代码分割等高级功能. 在我们学习可以自动化此过程的工具之后, 我们将逐步了解手动设置项目.
+
+*** 创建一个空目录
+
+这个目录将保存我们的项目. 在我们的案例中, 名称将是 ~First Project~. 让我们创建目录：
+
+#+begin_src bash
+mkdir first-project
+cd first-project
+#+end_src
+
+最顶层目录的名称通常使用 ~kebab-case~. 虽然没有严格的规则, 但这是一个强烈的约定. 在[[https://clojars.org][Clojars]]上托管的大多数Clojure库都遵循这一约定.
+
+*** 创建shadow-cljs.edn文件
+#+begin_src bash
+touch shadow-cljs.edn
+#+end_src
+
+用你选择的编辑器打开这个文件. 你的配置应该看起来像这样：
+
+#+begin_src clojure
+;; shadow-cljs.edn的内容
+;; 这里是示例配置, 具体内容根据项目需求定
+#+end_src
+
+如果这看起来没什么意义, 不用担心. 我们将详细介绍每一对键值对. 然而, 你应该注意到了关键字、映射和向量的使用.
+
+*** 代码路径
+源路径指定了源代码所在的目录. 在我们的示例中, 我们添加了两个目录: ~src~ 和 ~resources~.
+
+~src~ 文件夹用于ClojureScript代码, 而 ~resources~ 文件夹保存支持资产, 如配置文件、图片、样式表等. 这些名称可以是任何东西.
+
+名为 ~resources~ 的目录被Java的IO模块使用, 延伸地, 也被Clojure的IO模块使用. 源代码和资源目录务必遵循此规则.
+
+一些大型项目可能在多种Clojure方言中有代码. 一个流行的组合是在前端使用ClojureScript, 在后端使用Clojure. 在同时存在多种方言的情况下, ~src~ 路径可以设置为 ~src/cljs~ 和 ~src/clj~. 再次强调, 这只是一个约定. 如果你遵循约定, 你的Clojure代码进入 ~src/clj~ 文件夹, 你的ClojureScript代码进入 ~src/cljs~ 文件夹.
+
+然而, 如果你愿意, 你可以打破约定. 将源路径定义为 ~src/clj~ 并将ClojureScript代码放在该文件夹内是合法的. 只要路径存在, 构建工具就不会抱怨.
+
+让我们创建它们:
+#+begin_src bash
+# 在first-project目录内
+mkdir src
+mkdir resources
+#+end_src
+
+完成后, ~first-project~ 目录应如下所示：
+#+begin_src bash
+.
+├── resources
+├── shadow-cljs.edn
+└── src
+#+end_src
+
+*** 项目依赖
+这对键值用于定义项目的JVM依赖.
+
+你可能想知道为什么Shadow, 一个为ClojureScript(针对JavaScript的Clojure)构建的工具, 支持JVM依赖?
+这是因为Clojure支持宏, 这些宏可以用JVM Clojure编写, 并在ClojureScript内使用. 一些需要Clojure和ClojureScript的库通过Maven(或Clojars)分发.
+
+Shadow也支持NPM依赖, 但这些依赖进入标准的 ~package.json~ 文件, 我们将在不久后创建. 在Shadow的情况下, ~:dependencies~ 键指的是托管在Maven上的JVM依赖.
+
+由于我们的第一个项目不需要任何外部库, 该值是一个空向量. 如果我们有一些依赖, 向量看起来会像这样：
+#+begin_src clojure
+;; 不要将此添加到你的Shadow配置中. 仅用于演示目的！
+
+:dependencies [[lilactown/helix "0.0.9"]
+               [cljs-http "0.1.46"]]
+#+end_src
+
+~dependencies~ vector的每个元素是一个两元素vector, 其中第一个元素是包的名称, 第二个元素是版本号.
+
+*** NREPL
+NREPL代表网络REPL. REPL代表读取、求值、打印循环. 术语REPL经常与术语 ~Shell~ 互换使用.
+在某种意义上, 它们是相似的, 但就实现而言, 例如Python Shell, 与Clojure REPL非常不同.
+
+你已经看到了一个REPL. 当你在终端中输入 ~clj~ 时, 你启动了默认的Clojure REPL. 这个REPL随Deps CLI一起提供.
+
+Shadow也随附一个REPL(其他所有构建工具也是如此). 默认情况下, Shadow的REPL作为服务运行, 可以通过接口连接. 在大多数情况下, 文本编辑器连接到这个REPL.
+这种连接提供了多种IDE类特性.
+
+这个Clojure的方面只适用于Lisps, 可能不会立即理解. NREPL是使Clojure开发迅速的工具之一. 它如此重要, 以至于我们专门为它安排了一个完整的章节.
+
+现在, 我们只需要知道示例配置将在端口9000上启动NREPL. 任何希望连接到这个项目的NREPL的人都可以在地址 ~nrepl://localhost:9000~ 上这样做.
+
+还记得为你的编辑器(Calva、Cursive、Cider)安装NREPL包吗？这些是将连接到这个NREPL的客户端.
+
+*** 构建
+Shadow可用于针对多个JavaScript输出. 你可以生成适合作为NPM模块发布的代码, 适合在浏览器中使用的代码, 或其他内容. ~:builds~ 选项帮助你配置这一点.
+
+在我们的示例中, 我们要求Shadow产生 ~:target~ 针对Node运行时(~:node-script~)的代码, 并将其输出到 ~build/node-script/core.js~ 目录. Shadow将自动创建该目录(如果它不存在).
+
+~:node-script~ 目标是适合需要从命令行运行的任务的好选项.
+
+~:main~ 关键字接受一个命名空间限定的函数名. 命名空间限定是用来指代在特定命名空间中定义的函数的一个花哨术语.
+在我们的例子中, 我们希望在脚本运行时调用命名空间 ~first-project.core~ 中定义的 ~main~ 函数.
+
+考虑到我们的构建配置, 如果我们如下从Node调用输出脚本：
+
+#+begin_src bash
+node build/node-script/core.js <命令行参数>
+#+end_src
+
+作为 ~:main~ 定义的函数将被调用, 并提供所提供的参数, 即 ~(first-project.core/main <命令行参数>)~
+
+Shadow的构建机制非常灵活. 我们的配置只是冰山一角. 随着我们的项目在复杂性上的增长, 我们将更多地探索这一点.
+
+我们配置了Shadow的 ~:main~, 但尚未创建那个命名空间. 首先, 我们需要创建一个文件来保存该命名空间：
+#+begin_src bash
+mkdir -p src/first_project
+touch src/first_project/core.cljs
+#+end_src
+
+一旦我们有了文件, 我们就可以定义main函数：
+
+#+begin_src clojure
+;; src/first_project/core.cljs的内容
+;; 这是示例ClojureScript代码, 定义了main函数
+#+end_src
+
+我们之前见过 ~defn~. 但 ~ns~ 函数是新的. 它允许你定义文件的命名空间.
+
+命名空间让你引用和导入功能. 在我们的配置中, 我们引用了 ~main~ 函数.
+
+如果我们有另一个命名空间, 比如 ~first-project.utils~, 我们可以使用 ~:require~ 参数在 ~first-project.core~ 中使用那里定义的函数：
+
+#+begin_src clojure
+(ns first-project.core
+  (:require [first-project.utils :as u]))
+#+end_src
+
+有了上面的require语句, 任何在 ~first-project.utils~ 命名空间中定义的函数 ~x~, 都将在 ~first-project.core~ 命名空间中以 ~u/x~ 的形式可用.
+
+** 命名空间命名规则
+命名空间与源路径紧密相关. 命名空间也需要我们遵循一些命名规则. 在我们的例子中, 当我们引用 ~first-project.core/main~ 时, 我们是在引用：
+- 在源路径上(即 ~src/first_project~)存在的名为 ~first_project~ 的目录
+- 在 ~first_project~ 目录内存在的名为 ~core.cljs~ 的文件, 以及
+- 在 ~core.cljs~ 文件中定义的名为 ~main~ 的函数
+
+使用 ~ns~ 函数定义命名空间时使用 ~kebab-case~, 但相应的文件或文件夹使用 ~snake_case~.
+
+以下是一些命名空间定义及其在磁盘上的相应路径的例子：
+
+| ns定义                               | 磁盘上的路径                             |
+|--------------------------------------+------------------------------------------|
+| (ns common-lib.util)                 | src/common_lib/util.cljs                 |
+| (ns first-project.validation-helper) | src/first_project/validation_helper.cljs |
+| (ns first-project.shared.ui)         | src/first_project/shared/ui.cljs         |
+
+对于所有构建工具, 命名空间的命名规则是通用的.
+
+既然命名空间期望在特定路径上存在一个文件, 你能想到 ~(ns first-project.core)~ 的另一个在磁盘上的有效路径吗?
+
+如果你想到了 ~resources/first_project/core.cljs~, 你是对的. 构建工具只需要代码在源路径上可用. 既然 ~resources~ 是一个源路径, 如果你将文件放在那里, Shadow不会抱怨. 然而, 这将打破使用 ~src~ 目录用于源代码的约定, 并让你的团队感到困惑, 所以不要这样做.
+
+** NPM依赖
+Shadow允许直接导入NPM模块. Shadow本身作为一个NPM模块分发, 然而, 它需要JDK在类路径上才能操作.
+
+
+#+begin_quote
+如果你遵循了本课程的安装过程, 你已经在类路径上安装了JDK.
+#+end_quote
+
+
+** 初始化NPM项目
+我们将使用~yarn~, 但如果你喜欢, 也可以使用 ~npm~. 在 ~first-project~ 目录中, 初始化一个新项目：
+
+#+begin_src bash
+yarn init
+# 或 npm init
+#+end_src
+
+你会被询问项目名称、许可信息和一些其他字段. 保持按回车键是安全的. 这个项目只是为了让我们学习如何设置ClojureScript项目. 完成后, 你的目录结构应该如下所示：
+
+#+begin_src bash
+.
+├── package.json
+├── resources
+├── shadow-cljs.edn
+└── src
+#+end_src
+
+根据你初始化NPM项目的方式, ~package.json~文件应该看起来类似于：
+#+begin_src json
+{
+  "name": "first-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true
+}
+#+end_src
+
+** 安装Shadow
+我们已经创建了Shadow配置, 但还没有安装它. 由于它是一个NPM包, 让我们通过 ~yarn~ 安装它. Shadow应该作为 ~dev~ 依赖安装, 因为它在运行时不需要.
+
+#+begin_src bash
+yarn add shadow-cljs --dev
+# 或 npm install shadow-cljs --dev
+#+end_src
+
+在撰写本文时, 最新的稳定版本是 ~2.28.3~. 要检查安装情况, 你可以查看Shadow的帮助菜单：
+
+#+begin_src bash
+yarn shadow-cljs --help
+# 或 npx shadow-cljs --help
+#+end_src
+
+你应该会看到一个API方法列表.
+
+** 结论
+在这节课中, 我们学习了如何从头开始设置一个Shadow项目. 我们逐步了解了一些Shadow配置参数, 并理解了命名空间的规则.
+
+我们还设置了一个NPM项目并安装了Shadow.
