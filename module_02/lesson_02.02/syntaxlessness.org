@@ -1,0 +1,89 @@
+#+TITLE: 继续探讨“无语法”概念
+
+** 无语法
+
+“无语法”这个词是我们创造出来的, 用以表明Lisps没有语法.
+
+你可能会想, “我们刚刚在上一课中学习了Clojure的语法, 现在你却说Lisps没有语法!?”. 我们知道我们的说法听起来有些奇怪. 但是到本课结束时, 它会变得有意义.
+
+在C家族语言如JavaScript中, 下面的条件判断是常见的：
+
+#+begin_src js :results output :exports both
+if (a > b) {
+  console.log(a)
+} else {
+  console.log(b)
+}
+#+end_src
+
+
+这个条件判断在Clojure中的等价形式看起来像这样：
+
+#+begin_src clojure
+(if (> a b)
+  (prn a)
+  (prn b))
+#+end_src
+
+~if~ 函数在列表中期待三个元素：条件、真值块和假值块.
+
+注意 ~if~ 和 ~>~ 只是函数, 不像C风格语言, 其中~if~、~else~和~>~是语法的一部分.
+** 表达性
+由于Clojure是一种函数式语言, 并且没有C风格语言意义上的语法, Clojure代码更具表达性和简洁性.
+
+我们一开始的例子, 可以重写为：
+
+#+begin_src clojure
+(prn (if (> a b) a b))
+#+end_src
+
+如果你的脑海中认为这个例子是精心设计的, C风格版本可以使用三元运算符重写, 很好！你在正确的思考轨道上. C风格版本可以重写为：
+
+#+begin_src js :results output :exports both
+console.log(a > b ? a : b)
+#+end_src
+
+
+但Clojure代码和C风格代码（上述例子中的JavaScript）之间有明显的区别.
+
+三元运算符是一种新的语法, 而在Clojure代码中, 只是改变了函数调用的顺序. 如果JavaScript具有Lisps的表达性, 以下代码应该是有效的：
+
+
+#+begin_src js :results output :exports both
+console.log(if (a > b) a else b)
+#+end_src
+
+
+但它不是. 在C风格语言中, 语法字面量（组成语法的元素）可以出现的位置是有限的.
+
+三元运算符对于上述简单场景来说足够好, 但随着我们的应用变得更加复杂, 三元运算符变得难以管理. 新的语法字面量占据了心智份额.
+
+引入新的语法阻碍了向后兼容性. 然而, Lisps因为不强制执行严格的语法概念, 所以没有语法问题.
+
+由于大多数著名的语言都是C风格的, 所以语法的概念在每个人的脑海中都根深蒂固. 这导致的代码不如Lisp那样具有表达性.
+
+在这里不要误解我们. Lisp并不总是比C风格语言更具表达性. 只是Lisps通过不强制执行语法, 使开发人员能够编写更简洁的代码. 随着我们的程序变得更复杂, 这一属性将变得更加明显.
+
+** 重新定义核心
+在Clojure中, 您可以使用 ~defn~ 函数重新定义 ~if~ 来表示别的东西：
+
+#+begin_src clojure
+(defn if [condition truthy-block falsy-block]
+  ...)
+#+end_src
+
+想不出重新定义 ~if~ 的好理由, 但是可以这么做.
+
+然而, 有好理由重新定义一些其他函数. 如果您希望向量有更高效的 ~conj~.
+
+这为第三方开发者打开了大门, 他们可以构建常见操作的更快实现. 例如, [[https://github.com/bsless/clj-fast][bsless/clj-fast]] 是Clojure原生数据操作函数的另一种实现.
+
+没有语法的概念. 我们在上一课中学到了唯一的硬性规则, 即列表是函数调用, 列表的第一个元素是将被调用的函数.
+
+** 推荐阅读
+
+- [[https://stopa.io/post/265][Lisp语法的直觉]] 作者 [Stepan Parunashvili](https://twitter.com/stopachka)
+
+通过这一课, 我们探讨了Lisps（特别是Clojure）的一种独特特性——无语法性, 以及它如何使得代码更具表达性和灵活性. 我们了解到,
+在Clojure中, 几乎所有东西都是通过函数调用表达的, 这与传统C风格语言的严格语法规则形成了鲜明对比.
+这种灵活性使得开发人员能够以更直接和简洁的方式表达逻辑和操作, 同时也打开了对语言核心行为自定义的可能性.
