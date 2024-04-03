@@ -1,0 +1,130 @@
+#+TITLE: NREPL和内联评估
+#+SLUG: language-semantics-nrepl
+#+DESCRIPTION: REPL是Lisper工具箱的基本元素。在这一章中，我们将巩固对REPL和编辑器集成的理解。我们还将了解REPL带来的一些问题。
+#+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
+
+* NREPL和内联评估
+
+REPL代表读取(源字符串)，评估(源字符串)，打印(结果)和循环.
+
+根据官方Clojure文档，[[https://clojure.org/guides/repl/guidelines_for_repl_aided_development][REPL是你的程序的用户界面]].
+
+Clojure是一种托管语言. 在我们的案例中，ClojureScript托管在JavaScript上(Node或浏览器). 这意味着在给定的时刻，有两套代码可用：我们编写的CLJS代码和构建工具产生的JS代码.
+
+为了测试我们的代码，我们需要运行JS版本. 但是修改是对CLJS版本进行的. REPL提供了一个双向桥接这两个领域的桥梁. 它允许你在不离开ClojureScript领域的情况下，控制JavaScript领域中的代码执行.
+
+** 内联评估演示
+内联评估是一个小众概念. 我们先看最终产品，然后再自下而上构建概念. 我们将使用 ~first-project~ 和Shadow进行这个演示：
+
+[[file:public/assets/repl-demo.gif]]
+
+注意我们是如何内联评估代码的. 内联评估利用NREPL在内联执行代码. 这让我们在不离开编辑器的情况下开发和调试函数. 内联评估不仅限于核心函数. 在演示中，我们定义了一个新函数，评估了 ~defn~，所以它在命名空间中可用，然后内联调用了该函数. 你也可以评估第三方库，参考内联文档，等等. 内联评估是Lisper的瑞士军刀.
+
+类似于React的热重载每次你保存时都会编译你的代码，以便在你的浏览器中提供新版本. 内联评估让你完全绕过浏览器(或运行时)并允许你直接在编辑器中评估你的代码.
+
+我们的 ~first-project~ 被配置为运行Node脚本，所以代码的内联执行发生在Node环境中，REPL充当桥梁. 在这一章中，我们将连接REPL到你的编辑器.
+
+** REPL的范围
+
+到目前为止，我们已经引入了多个工具到我们的过程中. 让我们看看一切如何适应大局.
+
+[[file:public/assets/repl-scope.png]]
+
+1) 你在文本编辑器中编写ClojureScript代码(我们已经有了 ~first-project~ 的源代码)
+2) Shadow ~watch~ 将你的CLJS代码转换为有效的JavaScript代码(可以使用 ~yarn shadow-cljs watch :script~ 运行)
+3) 你可以执行一个命令，它将在Node环境中运行JS代码，就像我们之前做的那样(在另一个终端中使用 ~node build/node-script/core.js~)
+4) Node(或运行时)执行代码并退出(或不退出)
+
+你还记得当Shadow在 ~watch~ 模式下运行时，Node脚本没有退出吗？
+
+这是因为REPL需要运行时进行内联评估. REPL是CLJS源代码和运行时之间的桥梁. Shadow将你的代码转换为准备好的运行时代码，REPL可以启动执行，无需完全重建即可更新功能，并将运行时的输出从编辑器返回. 这就是为什么REPL是你的程序的用户界面.
+
+** 将你的编辑器连接到NREPL
+如果你遵循了上一节的步骤，你会在你的编辑器中打开源代码，Shadow watch在一个终端，Node脚本在另一个终端.
+
+我们已经将NREPL配置为在端口9000上运行，所以让我们将我们的编辑器连接到它. 我们将讨论多个编辑器，但你只需要遵循适用于你选择的编辑器的部分.
+
+*** 连接VS Code和Calva
+
+在VS Code中打开第一个项目文件夹. 在左下角，你应该看到一个NREPL按钮，状态为 ~disconnected~. 如果你看不到这个按钮，请参考~Getting Started~部分，并确保你的编辑器正确设置.
+
+点击NREPL按钮，然后点击~Connect to running REPL server in project~.
+你也可以键入~Ctrl/Cmd+Shift+p~，然后搜索~Calva: connect to running repl server in project~.
+
+你将被要求输入主机和端口. 大多数情况下，Calva会读取你的配置并自动填写这些信息. 如果没有发生这种情况，请输入localhost:9000. 我们在Shadow配置中为REPL配置了这个端口.
+
+在REPLs的选择中，选择~Shadow CLJS REPL~. 在连接到的构建的选择中，选择~:script~.
+
+你应该看到一个Calva窗口，上面有消息~REPL Connected~. 编辑器左下角的NREPL状态也会变成金黄色，表示连接成功：
+
+[[file:public/assets/calva-window.png]]
+
+为了验证连接，打开 ~first-project.core~ 命名空间(这个命名空间位于 ~src/first_project/core.cljs~)并在文件底部键入一个简单的表达式，比如 ~(* 4 5)~.
+
+现在将你的光标放在这一行的末尾，并按 ~Ctrl/Cmd+Shift+p~. 在命令菜单中，搜索 ~Calva: Evaluate current form~ 并按回车. 你应该看到结果如 ~=> 20~.
+
+接下来尝试向你的运行时(即在终端中运行的Node脚本)打印一条消息. 评估~(println :hi)~. 这应该会闪现~=> nil~. 现在检查你的终端，你应该看到打印了~:hi~.
+
+#+begin_quote
+使用命令菜单调用内联评估可能会变得乏味. 我们建议你将 ~Ctrl+x+e~ 快捷键分配给此命令.
+#+end_quote
+
+
+*** 连接Emacs和Cider
+Emacs需要在你的项目中添加一个额外的依赖，以便Cider集成能够工作. 将~cider-nrepl~依赖添加到你的Shadow配置中：
+
+#+BEGIN_SRC clojure
+{lang=clojure,crop-start-line=2,crop-end-line=5}
+<<[first-project/shadow-cljs.edn](./protected/source_code/first-project/shadow-cljs.edn)
+#+END_SRC
+
+在保存对配置的更改后，你需要重启Shadow ~watch~.
+
+要连接到NREPL，我们需要~M-x cider-connect~. 在地址提示中，输入 ~localhost~ 并按回车. 在下一个端口提示中输入 ~9000~ 并按回车.
+
+一个Cider缓冲区应该打开，上面有一些关于Cider和NREPL的信息. 在提示~user=>~中输入~(shadow/repl :script)~. 这告诉Cider在这个REPL会话中使用~:script~目标.
+
+现在切换到 ~first-project.core~ 缓冲区，并确保启用了 ~cider-mode~. 你应该在你的状态栏/电源线上看到一个指示. 你可以使用 ~M-x cider-mode~ 启用或禁用 ~cider-mode~.
+
+为了验证连接，输入表达式 ~(* 5 4)~ 到 ~first-project.core~ 缓冲区. 然后将你的光标放在这个表达式的末尾，并使用 ~C-x e~ 评估它. 你应该看到结果 ~=> 20~ 在光标旁边闪现.
+
+尝试执行另一个表达式 ~(println :hi)~. 这应该会闪现 ~=> nil~, 并且 ~:hi~ 应该被打印在你的运行时中，即在终端中运行的Node脚本.
+
+*** 连接IntelliJ和Cursive
+
+** 这里发生了什么？
+当你评估一个形式时，你的编辑器将它传递给REPL. REPL找出应该运行的相关JavaScript代码，并在连接的运行时中执行它.
+在我们的案例中，那个运行时是Node(图：REPL的范围中的位置#3). 代码被执行，任何返回的值都会内联闪现.
+当我们打印一条消息时，我们的输出去了STDOUT(即终端). 内联评估闪现 ~=> nil~, 因为 ~println~ 不返回任何东西.
+
+** REPL的危险
+REPL提供了出色的反馈，但也可能导致一些问题. 它是辅助你的开发过程的工具，不是你的开发过程的替代品.
+
+*** 悬挂代码
+我们在 ~first-project.core~ 命名空间中输入了一些任意代码以便内联评估.
+现在没问题，但想象一下，如果你将这些代码发送到生产环境. 每次这个命名空间加载时，程序都会评估乘法和打印函数.
+
+始终将REPL中的代码放入~comment~函数中，如下所示：
+
+#+BEGIN_SRC clojure
+(comment
+  (* 4 5)
+  (println :hi))
+#+END_SRC
+
+~comment~ 函数是一个替代文学形式评论(即以 ~;;~ 开始的那些)的方法. 这种类型的注释，包含专门在开发时运行的代码，也被称为富注释.
+
+*** 进度的印象
+你可以在REPL中取得进展，但最终你的程序需要在其他地方运行. 在REPL中让某事工作不等于准备好投入生产. 将REPL视为一个检查工具. 当你处理纯函数时，它发挥光彩. 随着我们在本课程中编写更多代码，我们将理解如何最好地利用REPL.
+
+你还应该养成保存文件的习惯. 有了REPL，你可以在命名空间中定义函数并运行它们，而实际上不保存文件. 这意味着当你的REPL重启时，函数将不可用，你的代码可能会崩溃！
+
+** 始终保持NREPL开启
+你可能已经注意到了启动缓慢和连接到NREPL的额外负担. 通常的做法是永远不关闭 ~watch~ 和REPL会话. 这样，每当你坐下来工作时，你的工具箱就会准备好.
+
+** 结论
+在这一章中，我们学习了REPL并了解了如何内联评估代码. 我们建立了对REPL的心智模型，并研究了它的一些优点和缺点.
+
+** 推荐观看
+
+- [[https://www.youtube.com/watch?v=Qx0-pViyIDU][带着剪刀跑步]]
