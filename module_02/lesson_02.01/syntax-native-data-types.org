@@ -1,0 +1,497 @@
+#+TITLE: 语法和原生数据类型
+#+SLUG: language-semantics-syntax-native-data-types
+#+DESCRIPTION: 让我们深入了解原生数据类型和一些常见操作。
+#+isPublicLesson: true
+
+* 语法和原生数据类型
+
+Clojure为开发者提供了标准的数据类型集合. 所有数据结构都是不可变的. 所有数据结构都使用接口进行操作. 这允许轻松地与底层宿主进行互操作.
+
+在本模块中, 我们将学习原生数据类型和一些常见操作. 我们建议您启动Clojure REPL并亲自尝试这些操作. 您可以使用`clj`命令启动REPL：
+#+begin_src bash
+$ clj
+Clojure 1.11.1
+user=>
+#+end_src
+
+** 阅读Clojure代码
+如果没有LISP背景, Clojure代码起初会感觉不自然. 这是因为括号的位置不同.
+
+通常, 当看到一个Clojure形式如下：
+
+#+begin_src clojure
+(operation arg1 arg2)
+#+end_src
+
+在脑海中, 应该将其视为一个列表, 其中第一个元素是要执行的操作, 其他元素是该操作的参数. 这个操作可以是一个函数、宏或其他东西.
+
+** type函数
+`type`函数告诉值或变量的原生数据类型. 可以如下使用：
+
+#+begin_src clojure
+user=> (type 1)
+java.lang.Long
+#+end_src
+
+1可以是一个变量或任何其他数据类型.
+
+** nil
+
+任何数据类型都可以是 ~nil~. ~nil~ 的实际实现取决于宿主. 对于Clojure来说, 它是Java的 ~null~, 对于ClojureScript来说, 它是JavaScript的 ~null~.
+
+~nil~ 的逻辑值是 ~false~.
+
+可以使用 ~nil?~ 函数确定一个变量是否是 ~nil~. 带有问号 ~?~ 后缀的函数通常是一个谓词.
+
+#+begin_src clojure
+user=> (nil? nil)
+true
+#+end_src
+
+** 布尔值
+这些代表逻辑 ~true~ 和 ~false~ 值. 在JVM上, 这些分别对应于 ~java.lang.boolean.TRUE~ 和 ~java.lang.boolean.FALSE~.
+
+函数 ~true?~ 和 ~false?~ 可以用来确定一个值是真还是假.
+
+** 数字
+像所有其他数据类型一样, 数字也只是宿主实现的数字. 然而, 宿主之间的差异被消除了. 抛开实现细节不谈, 支持以下类型的数字.
+
+*** 长整型
+Clojure中的所有数字默认都是Long类型. 您可以使用~type~函数在REPL中检查这一点.
+#+begin_src clojure
+user=> (type 19)
+java.lang.Long
+#+end_src
+
+*** 比率
+像 ~22/7~ 这样的非终止小数被存储为比率. 比率的数据类型是 ~clojure.lang.Ratio~. 这表明 ~Ratio~ 是一个Clojure数据类型, 不依赖于宿主.
+#+begin_src clojure
+user=> (type 22/7)
+clojure.lang.Ratio
+#+end_src
+Clojure在宿主之间处理了实现细节.
+
+*** BigInt和BigDecimals
+如果一个数字对于 ~Long~ 类型来说太大了, 它可以用 ~N~ 后缀来表示 ~clojure.lang.BigInt~. 例如 ~44N~.
+
+带有 ~M~ 后缀的数字表示 ~java.math.BigDecimal~ 或Java的BigDecimal的等效宿主实现.
+
+Clojure操作智能地将数字包装并转换为正确的数据类型. 例如, 如果您使用除法 ~/~ 函数将22除以7, 您将得到一个比率：
+
+#+begin_src clojure
+user=> (type (/ 22 7))
+clojure.lang.Ratio
+#+end_src
+
+注意如何将两个函数 (~type~ 和 ~/~)嵌套使用.
+
+*** 常见的数值函数
+
+由于Clojure没有语法概念, 您期望的数值操作都实现为函数.
+
+对于计算, 我们有 ~+~, ~-~, ~* ~/~ ~min~ ~max~ ~quot~ 和 ~rem~.
+
+代数函数可以接受多个参数：
+
+#+begin_src clojure
+user=> (+ 1 3 4)
+8
+user=> (min 1 4 5)
+1
+#+end_src
+
+核心还附带了函数 ~inc~ 和 ~dec~, 分别将1加到一个数字上或从一个数字上减去1：
+
+#+begin_src clojure
+user=> (inc 4)
+5
+
+user=> (dec 54)
+53
+#+end_src
+
+常见的比较函数也内置在核心中. 这些是 ~==~ ~>~ ~<~ ~>=~ ~<=~ ~zero?~ ~pos?~ ~neg?~.
+
+像算术运算符一样, 一些比较运算符也接受多个参数：
+
+#+begin_src clojure
+user=> (== 1 1 1 1 1)
+true
+user=> (== 1 1 1 1 2)
+false
+user=> (< 1 3 5)
+true
+user=> (< 1 3 5 0)
+false
+#+end_src
+上面的 ~<~ 函数期望参数序列按递增顺序排列. 其他不等函数也是如此.
+
+** 字符串
+
+字符串用双引号表示"像这样".
+
+我们已经知道了 ~println~ 函数. 一些其他常见的字符串函数是：
+- ~prn~ : 像 ~println~ 但不包括终止换行符"\n"
+- ~pr-str~: 打印给定字符串并返回它, 不像 ~prn~ 返回nil
+- ~str~: 可用于将值强制转换为字符串. 也可用于连接多个字符串
+- ~string?~: 判断一个变量是否为字符串
+
+#+begin_src clojure
+user=> (prn "hello newline")
+"hello newline"
+nil
+user=> (pr-str "hello newline")
+"\"hello newline\""
+user=> (str 1)
+"1"
+user=> (str "hi" "newline")
+"hinewline"
+#+end_src
+
+** 字符
+字符用于表示单个字形, 例如 ~\newline~ 或 ~\a~.
+
+一些常见的字符函数是：
+- ~char~: 将变量强制转换为字符或抛出异常
+- ~char?~: 判断一个变量是否为字符
+
+** 命名空间
+Clojure代码组织在命名空间中. 当我们开始编写更高级的程序时, 将看到这一点. 一个命名空间是一组符号的集合. 这些符号可能用于表示函数或值. 符号可以跨命名空间导入.
+
+当您在终端启动Clojure REPL时, 您会看到提示符 ~user=>~. 这表示处于user命名空间. 如果熟悉JS模块或Java包, 可以将Clojure命名空间视为相同的概念.
+
+** 定义变量
+函数 ~def~ 用于定义静态值. 所有的 ~def~ 都有命名空间.
+
+#+begin_src clojure
+(def age 20)
+#+end_src
+
+这等同于ES6的 ~const age = 20~.
+
+** symbol
+符号是用于引用其他东西的标识符. 它们被定义为字符串, 并且可以有命名空间. 符号只能包含一些特殊字符 ~* + ! / . : - _ ?~. 符号不能以冒号开始(冒号开始是 ~keyworkd~).
+
+#+begin_src clojure
+user=> (def fname "Ben")
+#'user/fname
+#+end_src
+
+这里 ~fname~ 是一个有命名空间的符号, 即在 ~user~ 命名空间中定义的. 字符 ~/~ 用于将符号与命名空间分开. 符号默认具有命名空间. 在这种情况下, 术语 ~#'user/fname~ 告诉我们 ~fname~ 是在 ~user~ 命名空间中定义的符号.
+
+您可以通过添加单引号作为前缀 ~'fname~ 来引用符号. 函数 ~symbol?~ 可以用来判断一个标识符是否为符号.
+
+** 关键字(~keyword~)
+关键字类似于符号, 但不像符号eval为它的 ~value~, 关键字eval为它们自己. 它们用冒号前缀写作 ~:like-so~, 默认不具有命名空间. 上面的符号 ~fname~ 保存了一个字符串值, 然而, 关键字 ~:like-so~ 没有显式值.
+
+关键字提供快速的等值检查, 并且可以在符号可能不可行的地方使用. 例如, 在枚举的情况下, 您希望一个值属于一组预定义的值.
+
+关键字实现了 ~IFn~ 接口, 即像函数一样可调用.
+
+#+begin_src clojure
+user=> (def m {:age 20 :roles [:admin :user]})
+#'user/m
+user=> (:age m)
+20
+#+end_src
+
+观察我们如何使用 ~:age~ 作为map m的函数. 默认行为是返回键为正在使用的关键字的值.
+
+关键字, 像符号一样, 可以使用正斜杠 ~/~ 进行命名空间. 文字 ~:user/m~ 表示 ~user~ 命名空间中的关键字. 要自动将当前命名空间添加到关键字中, 可以使用两个冒号. ~::m~ 与 ~:user/m~ 相同, 前提是您处于user命名空间.
+
+#+begin_src clojure
+user=> ::m
+:user/m
+user=> :other-user/m
+:other-user/m
+#+end_src
+
+一些常见的关键字函数是：
+- ~keyword?~: 检查一个变量是否为
+
+关键字
+- ~keyword~: 尝试将变量强制转换为关键字
+- ~namespace~: 获取关键字的命名空间
+
+#+begin_src clojure
+user=> (keyword? :a)
+true
+user=> (keyword \a)
+nil
+user=> (keyword "a")
+:a
+user=> (keyword "some-ns" "a")
+:some-ns/a
+user=> (keyword "some-ns" "a")
+:some-ns/a
+user=> (namespace ::a)
+"user"
+#+end_src
+
+** 集合
+复合数据结构被宽泛地称为集合. 这些包括列表、向量、哈希映射和集合. 集合是不可变的、线程安全的, 并且被表示为抽象.
+
+修改集合会产生新的集合, 这些新集合可能与我们开始的集合类型相同, 也可能不同. 然而, 产生的集合将具有相同的逻辑接口.
+
+集合的操作是高效的, 因为数据不是复制到新的集合中, 而是回指到原始集合. 集合是可序列化的, 即实现了 ~ISeq~ 接口.
+
+一些常见的集合函数是：
+- ~count~: 计算集合中的元素数量
+- ~seq~: 返回可以循环遍历的序列. 不同数据类型的输出序列可能不同.
+
+** 列表(list)
+列表在Clojure中使用圆括号 ~()~ 定义. 由于列表用于解释函数调用, 所以像 ~(1 2 3)~ 这样的表达式在REPL中会抛出错误. 这是因为Clojure会尝试将列表的第一个元素(1)作为函数执行, 其余元素作为参数.
+
+为了避免这个问题, 可以使用单引号. ~'(1 2 3)~ 可以在REPL中无问题地被求值.
+
+列表实现了 ~ISeq~ 接口. 使用 ~conj~ 可以将新元素添加到列表的前面. 元素可以是任何数据类型.
+
+列表在概念上类似于链表, 因此在边缘写入非常高效. 如果希望按顺序访问变量, 列表也是一个很好的选择.
+
+一些常见的列表操作包括：
+- ~list~: 创建一个列表
+- ~list?~: 判断一个变量是否为列表
+- ~pop~: 获取列表的最后一个元素, 与~last~相同但更高效
+- ~peek~: 获取列表除第一个元素外的所有元素
+- ~count~: 以O(1)复杂度获取列表中的元素总数
+- ~conj~: 将一个元素添加到列表顶部
+
+#+begin_src clojure
+user=> (def l (list 1 3 4 "hello" :norway))
+#'user/l
+user=> l
+(1 3 4 "hello" :norway)
+user=> (list? l)
+true
+user=> (pop l)
+(3 4 "hello" :norway)
+user=> (count l)
+5
+user=> l
+(1 3 4 "hello" :norway)
+user=> (peek l)
+1
+user=> (conj l 42)
+(42 1 3 4 "hello" :norway)
+#+end_src
+
+
+列表的操作是不可变的, 即每次操作都会创建一个新的列表. 然而, 就实现而言, 新列表是在原始列表之上的视图, 使得操作高效.
+
+** 向量(vector)
+向量类似于列表, 除了它们是索引的. 这允许与列表相比更快的查找. 向量的查找复杂度为O(1). 向量使用方括号 ~[]~ 定义.
+
+向量是集合, 因此 ~count~, ~conj~ 和其他集合函数按预期工作. 使用 ~conj~ 可以将元素添加到向量的末尾.
+
+向量还实现了 ~IFn~ 接口, 因此可以像函数一样被调用. 它们接受单个参数, 一个索引号, 并返回该索引处的值.
+
+如果索引超出范围, 将引发异常.
+
+#+begin_src elisp
+user=> ([1 2 5] 0)
+1
+user=> ([1 2 5] 45)
+Execution error (IndexOutOfBoundsException) at user/eval194 (REPL:1).
+null
+#+end_src
+
+
+一些常见的向量函数包括：
+- ~first~: 获取向量的第一个元素
+- ~second~: 猜猜这会做什么？
+- ~take~: 从向量中取出前n个元素
+- ~drop~: 从向量中丢弃前n个元素
+- ~nth~: 获取索引处的元素
+
+
+#+begin_src elisp
+user=> (def v [1 82 :spiderman :asia])
+#'user/v
+user=> (first v)
+1
+user=> (take 2 v)
+(1 82)
+user=> (drop 2 v)
+(:spiderman :asia)
+user=> (nth v 1)
+82
+#+end_src
+
+
+上面示例中使用的函数是集合函数, 即可以应用于实现 ~ISeq~ 接口的所有数据结构.
+它们也可以很好地工作于 ~list~, 尽管效率可能有所不同.
+
+### 哈希映射
+或者只是映射, 是键值对. 映
+
+射是集合, 因此可以像集合一样被序列化、计数和操作.
+
+映射使用大括号表示：
+
+#+begin_src clojure
+(def m {:a "Hello"
+        :b "World"})
+#+end_src
+
+
+映射应始终有偶数个形式. 在上面的例子中, ~:a, "Hello~ ~:b, "World"~ 是键值对.
+
+注意我们不需要任何逗号或冒号来分隔元素. 映射键通常是Clojure关键字, 然而, 映射的键和值可以是任何数据类型. 下面的映射完全没问题：
+
+
+#+begin_src elisp
+(def m2
+  {:a :b
+   :m-av {:f :g}
+   [1 2 4] (list 34)
+   {:map :as-key} "Val"})
+#+end_src
+
+
+一些常见的映射函数包括：
+- ~assoc~: 添加键/值对到映射
+- ~dissoc~: 从映射中移除键/值对
+- ~keys~: 获取所有映射键
+- ~vals~: 猜猜~values~会做什么？
+- ~get~: 获取给定键的值
+- ~get-in~: 获取嵌套键的值
+- ~contains?~: 检查映射中是否包含键
+
+
+#+begin_src clojure
+(def m2
+  {:a :b
+   [1 2 4] (list 34)
+   {:map :as-key} "Val"})
+#'user/m2
+user=> (assoc m2 :c :d :e :g)
+{:a :b, [1 2 4] (34), {:map :as-key} "Val", :c :d, :e :g}
+user=> (dissoc m2 :a)
+{[1 2 4] (34), {:map :as-key} "Val"}
+user=> (get m2 [1 2 4])
+(34)
+user=> (get m2 :a)
+:b
+user=> (get-in {:a {:b :c}} [:a :b])
+:c
+user=> (contains? m2 :a)
+true
+#+end_src
+
+
+** 集合(set)
+集合是唯一值的集合, 可以使用 ~#{:a :b :c}~ 文字定义. 所有集合函数都可用. 一些常见的集合函数包括：
+- ~union~: 合并两个集合
+- ~intersection~: 计算集合交集
+- ~difference~: 计算集合差
+
+#+begin_src clojure
+user=> (def s #{:a :v})
+#'user/s
+user=> (def s2 #{:a :t})
+#'user/s2
+user=> (union s s2)
+Syntax error compiling at (REPL:1:1).
+Unable to resolve symbol: union in this context
+#+end_src
+
+
+~union~ 没有定义?!, 需要需要从 ~clojure.set~ 命名空间导入.
+
+导入命名空间的语法如下：
+
+#+begin_src clojure
+user=> (require '[clojure.set :refer [union difference intersection]])
+nil
+#+end_src
+
+
+还有更多导入命名空间的方法, 但我们将在后续模块中讨论这个话题. 现在, 导入这些函数后, 可以自己尝试运行它们.
+
+** 定义函数
+宏 ~defn~ 用于定义函数. 我们将更多了解宏, 但现在, 你可以将宏视为一种类型的函数.
+
+调用 ~defn~ 函数的列表的最后一个元素是该函数的返回值.
+我们在上面的JavaScript中实现的加法器将如下所示：
+
+#+begin_src clojure
+(defn adder [a b]
+        (+ a b))
+#+end_src
+
+注意我们不需要指定返回值. 列表的最后一个元素自动返回.
+
+** 逗号是可选的
+您不需要指定逗号, 因为它们被视为空白. 如果您愿意, 可以添加它们, 但不使用逗号是一个非常强烈的约定.
+
+#+begin_src clojure
+user=> (println 1 2 4)
+1 2 4
+
+user
+
+=> (println, 1, 2, 4)
+1 2 4
+#+end_src
+
+** 括号用于定义调用顺序
+在Clojure中没有BODMAS的概念, 你需要明确指定调用的顺序.
+#+begin_src clojure
+user=> (* 5 (+ 7 1))
+40
+#+end_src
+
+
+** 注释
+以分号开头的任何形式都是注释. 通常有两种注释：
+- 以双分号 ~;;~ 开头的. 当整行都是注释时使用, 和
+- 以单分号 ~;~ 开头的. 当注释与代码在同一行时使用
+
+
+#+begin_src clojure
+;; 这是一个注释
+(println (* 4 5)) ; 这也是
+#+end_src
+
+** 自指性
+C风格的语言在数据结构和代码之间有明确的区别. 考虑以下JavaScript代码：
+
+#+begin_src js
+const people = ["a", "b", "c"];
+const data = {"a": 1, "z": 26}
+
+function adder(a, b) {
+  return a+b;
+}
+#+end_src
+
+单词 ~function~ 和 ~return~ 以及花括号是语言语法的一部分.
+
+Clojure(和其他Lisp一样)没有用于语法的特殊形式. 相反, 使用普通的数据结构.
+
+如列表和向量. 这种属性被称为自指性或代码即数据. 上述JavaScript代码在Clojure中的表现如下：
+
+
+#+begin_src clojure
+(def people ["a" "b" "c"])
+
+(def data {"a" 1 "z" 26})
+
+(defn adder [a b]
+  (+ a b))
+#+end_src
+
+使用相同的数据结构来定义数据和代码. 代码即数据.
+
+** 结论
+我们学习了Clojure的Lispy语法和标准数据类型. 我们熟悉了REPL, 并看到所有Clojure数据结构都是不可变的. 我们还发现了集合被定义为抽象, 并且不同的集合实现了不同的接口.
+
+我们强烈推荐您熟悉本模块中展示的函数. 我们还推荐您在继续之前熟悉语法和REPL.
+
+本模块仅突出显示了每种数据类型可用的操作的一个子集. [[https://clojure.github.io/clojure/clojure.core-api.html][Clojure API文档]]是学习所有可用命名空间和方法的好地方.
+
+** 推荐观看
+
+- [[https://www.youtube.com/watch?v=wASCH_gPnDw][Expert to Expert: Rich Hickey and Brian Beckman - Inside Clojure]]
+
+通过这一系列的教程, 我们对Clojure的基础知识有了全面的理解, 从其语法和数据类型到函数的定义和使用, 再到集合的操作和命名空间的管理. 以上内容为您提供了一个坚实的基础, 让您能够开始在Clojure中编写更复杂和功能丰富的程序.
