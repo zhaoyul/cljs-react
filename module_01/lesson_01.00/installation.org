@@ -1,0 +1,92 @@
+#+TITLE: 安装
+#+SLUG: getting-started-installation
+#+DESCRIPTION: 在本章中, 我们将设置系统以运行Clojure。我们将安装所有必需的依赖项并运行“Hello World”程序。
+#+isPublicLesson: true
+#+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
+
+* 安装
+
+Clojure被设计为托管运行的. 这意味着它在其他语言之上运行. 我们将在本课程后面学习这个属性. 现在, 我们只需要知道运行Clojure需要JVM和NodeJS.
+
+** 检查是否已安装JVM和Node
+在开始之前, 首先检查系统是否已经安装了Node和Java.
+
+*** JVM
+
+在终端中, 执行命令 ~javac -version~.
+
+如果得到一个像 ~javac 11.1.3~ 这样的版本号, 那么JVM已经安装了, 可以安全地跳过JVM安装过程.
+推荐任何11或更高版本的Java.
+
+*** NodeJS
+
+命令 ~node -v~ 将显示当前安装的Node版本. 如果它结果为像 ~v12.16.1~ 这样的数字, 可以跳过Node安装过程.
+推荐最新稳定的Node版本.
+
+** 安装JVM/ JDK
+可以使用 [[https://java.com/en/download/][Oracle的JDK]], [[https://adoptopenjdk.net][Adopt Open JDK]] 或 [[https://openjdk.java.net/install/][Open JDK]]. 这三个JDK在开发方面是相同的. 唯一的区别是Open JDK和Adopt拥有更宽松的许可证. Oracle JDK需要商业用途的许可证.
+
+如果还没有安装JDK, 我们建议使用Adopt Open JDK. 详细的安装指南可以在以下URLs找到：
+- [[https://mkyong.com/java/how-to-install-java-on-mac-osx/][在MacOS上安装]]
+- [[https://adoptopenjdk.net/installation.html#windows-msi][在Windows上安装]]
+- [[https://adoptopenjdk.net/installation.html#linux-pkg][在RPM, Debian和Ubuntu上安装]]
+
+** 安装NodeJS
+如果使用Windows或Mac, 可以使用 [[https://nodejs.org/en/download/][官方安装程序]]. 只需下载基于的操作系统的正确包, 图形界面将引导完成安装.
+
+在Linux上, Node通过所有主要的包管理器（yum, apt等）作为 `nodejs` 分发. 可以根据的发行版 [[https://nodejs.org/en/download/package-manager/][这里]] 找到安装命令.
+
+** 安装Clojure
+
+*** 在MacOS上
+Clojure可通过[[https://brew.sh][Homebrew]]获得.
+
+
+#+begin_src clojure
+brew tap clojure/tools
+brew install clojure/tools/clojure
+#+end_src
+
+这个配方安装了Clojure CLI工具, 可以用来运行交互式REPL.
+
+*** 在Windows上
+
+Clojure在Windows上需要PowerShell 5. 可以找到详细的安装说明 [[https://github.com/clojure/tools.deps.alpha/wiki/clj-on-Windows][这里]].
+
+*** 在Linux上
+Clojure有一个 [[https://clojure.org/guides/getting_started#_installation_on_linux][官方bash脚本]] 用于处理Linux机器上的安装. 它预期已经安装了 `
+
+bash, curl, rlwrap和Java. 可以如下运行脚本：
+
+#+begin_src bash
+curl -O https://download.clojure.org/install/linux-install-1.10.1.727.sh
+chmod +x linux-install-1.10.1.727.sh
+sudo ./linux-install-1.10.1.727.sh
+#+end_src
+
+如果想更改默认安装位置, 请参考 [[https://clojure.org/guides/getting_started#_installation_on_linux][文档]].
+
+** 测试Clojure安装
+如果一切顺利, 执行命令 `clj` 应该会在选择的终端中启动一个交互式Clojure会话：
+
+#+begin_src clojure
+$ clj
+Clojure 1.11.1
+user=>
+#+end_src
+
+第一次运行这个命令时, Clojure可能会下载一些依赖.
+
+这是运行习惯性Hello World! 程序的好时机.
+
+#+begin_src clojure
+user=> (println "Hello World!")
+Hello World!
+nil
+user=>
+#+end_src
+
+
+** 结论
+
+在本章中, 我们安装了Clojure及其所需的依赖项. 在下一章中, 我们将学习LISP代码和编辑器集成.
