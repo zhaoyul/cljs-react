@@ -1,8 +1,9 @@
 #+TITLE: 条件表达式
-#+DESCRIPTION: Clojure提供了许多控制流条件表达式, 如if-else块。在这一章中, 我们将学习一些此类方法的API.
+#+DESCRIPTION: Clojure提供了许多控制流条件表达式, 如if-else块. 在这一章中, 我们将学习一些此类方法的API.
 #+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
 
 ** 引言
+
 Clojure可以帮助我们写出简洁的代码. 支持这一事实的一个主要因素是它丰富的标准库.
 到目前为止, 我们已经学习了语法、构建工具和NREPL. 在这个模块中, 我们将在这些知识的基础上进一步了解最常用的函数.
 
@@ -11,14 +12,10 @@ Clojure可以帮助我们写出简洁的代码. 支持这一事实的一个主�
 在这一章中, 我们将学习各种条件函数. 代码示例位于 ~first-project.conditionals~ 命名空间中. 到现在为止, 你应该能够轻松找出持有此命名空间的文件的磁盘路径.
 
 ** 创建 ~first-project.conditionals~ 命名空间
-Q: 此命名空间的正确磁盘路径是什么？
 
-A:
 #+begin_src bash
 touch src/first_project/conditionals.cljs
 #+end_src
-
-如果你猜对了, 很好. 如果你猜错了, 你可能想再次复习一下`项目结构`章节.
 
 ** if
 我们已经看到了 ~if~ 函数, 它接受三个参数：

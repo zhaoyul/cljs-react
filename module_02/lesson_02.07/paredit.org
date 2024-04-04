@@ -1,6 +1,7 @@
 #+TITLE: Paredit
 #+SLUG: language-semantics-paredit
 #+DESCRIPTION: Paredit是一个帮助结构化编辑的工具. 它帮助你非常轻松地编写和修改S-表达式, 以至于括号几乎会消失！在这一章中, 我们将学习Paredit的基本命令.
+
 #+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
 
 * Paredit

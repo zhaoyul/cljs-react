@@ -1,6 +1,6 @@
 #+TITLE: 语法和原生数据类型
 #+SLUG: language-semantics-syntax-native-data-types
-#+DESCRIPTION: 让我们深入了解原生数据类型和一些常见操作。
+#+DESCRIPTION: 深入了解原生数据类型和一些常见操作.
 #+isPublicLesson: true
 
 * 语法和原生数据类型

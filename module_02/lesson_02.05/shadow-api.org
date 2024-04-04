@@ -1,6 +1,6 @@
 #+TITLE: Shadow CLJS API
 #+SLUG: language-semantics-shadow-cljs-api
-#+DESCRIPTION: 我们的第一个项目现在已经就位. 在这一章中，我们将学习如何构建并运行它. 我们还将探索一些其他构建目标，并使用Reagent（一个ClojureScript包装器）探索Shadow和React.
+#+DESCRIPTION: 学习如何构建并运行它. 我们还将探索一些其他构建目标，并使用Reagent（一个ClojureScript包装器）探索Shadow和React.
 #+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
 
 Shadow提供了许多助手来编译和开发你的应用, 但我们现在只需要了解三种方法：

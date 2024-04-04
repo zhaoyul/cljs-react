@@ -1,9 +1,9 @@
-#+TITLE: NREPL和内联评估
+#+TITLE: NREPL的使用
 #+SLUG: language-semantics-nrepl
-#+DESCRIPTION: REPL是Lisper工具箱的基本元素。在这一章中，我们将巩固对REPL和编辑器集成的理解。我们还将了解REPL带来的一些问题。
+#+DESCRIPTION: REPL是Lisper工具箱的核心元素, 在这一章中, 我们将巩固对REPL和编辑器集成的理解.
 #+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
 
-* NREPL和内联评估
+* NREPL和Eval
 
 REPL代表读取(源字符串)，评估(源字符串)，打印(结果)和循环.
 

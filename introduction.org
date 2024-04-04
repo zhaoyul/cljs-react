@@ -1,0 +1,93 @@
+#+TITLE: Clojure for React Developers
+#+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
+
+
+介绍clojure作为一门lisp语言的一些特性和c系列语言的差异比较. 介绍如何clojurescript是一门更好的js语言.
+
+着眼前端工具链, 适合有一定基础的React开发者的, 在这个教程中, 我们将构建一个的SVG canvas图形编辑器. 为接下来的全功能的svg编辑器做知识储备.
+
+** 学习内容
+- Lisp语言中代码即语法树(syntax tree).
+- LISP语言结构决定了可以更高效的编辑, 以及各个编辑器的lisp工具扩展.
+- Clojure丰富标准库背后的的模型
+- 了解NREPL这样的工具, 以及带来的编程模式的变化
+- Clojure的托管特性及其嵌入JVM、JavaScript、CLR和其他语言生态系统的能力
+- 语言的简介性和表达力
+- 如何用Clojure创建React应用程序
+- 使用Reframe的Flux式状态管理
+- 集成后台API
+- 身份验证和访问控制
+- 单元测试
+- 与React Router和Fabric JS的集成
+- 懒加载和代码分割
+- 社区参考资料的地图
+
+** 主要描述
+Clojure是一个功能性的、托管的LISP, 以其表达性而闻名, 它可以与Javascript、Java和微软的通用语言运行时(CLR)进行出色的互操作.
+
+许多开发者赞扬Clojure允许的优雅和生产力, 但对于许多人来说, 它似乎是一种带有怪异语法的神秘语言, 很难开始使用. 这门课程将改变这种看法, 向你展示如何用这种奇妙的语言高效生产.
+
+在本课程中, 我们将构建一个类似Canva的基于网页的图形编辑器. 我们将从JavaScript开发者的角度探索Clojure. 在此过程中, 我们还将探索状态管理、身份验证、API集成以及与NPM的互操作.
+
+这门课程将带你从零开始, 只需几个小时, 就能理解Clojure语义、LISP工具, 并构建一个准备就绪的React应用程序.
+
+我们将从基础开始, 逐步构建一个前后端均用Clojure编写的全栈应用.
+
+使用ClojureScript(在JavaScript上运行的Clojure)构建的前端将是一个单页React应用程序, 具有路由、基于密钥的身份验证和API集成, 可以保存、列出、编辑和删除图形.
+
+在整个课程中, 我们将了解像REPL这样有助于开发的工具. 接近结束时, 我们将学习代码分割和端到端测试等高级概念.
+
+Clojure与其他语言不同, 因为它托管在现有的VM上, 并且可以利用这些VM. 这意味着你可以一次学习Clojure, 然后在后端用JVM或CLR, 前端用JavaScript写代码.
+
+如果像Rust这样的新技术明天接管了世界, 你很可能能够继续写Clojure, 因为一个Rust的寄生体已经在开发中了.
+
+通过这门课程, 你将获得一种超能力: 编写全栈Clojure应用程序的能力.
+
+** 课程内容链接
+
+*** 环境准备
+- [X] 环境搭建(在本章中, 设置系统以运行Clojure, 安装所有必需的依赖项并运行Hello World程序.)
+*** 语言简介/工具入门
+- [X] Clojure语言的托管特性(Clojure既不是编译型语言, 也没有自己的虚拟机. 相反, 它运行在其他语言的虚拟机上.)
+- [X] 语法和原生数据类型(深入了解原生数据类型和一些常见操作.)
+- [X] 探讨“无语法”概念(简洁到‘无’的与语法)
+- [X] 项目管理工具(lein, boot, shadow-cljs, etc.)
+- [X] 项目结构(创建一个新的仓库并从零开始使用Shadow CLJS设置一个项目.)
+- [X] Shadow CLJS API(在这个cljs项目中, 如何使用shadow API进行项目开发)
+- [X] NREPL的使用(REPL是Lisper工具箱的核心元素, 在这一章中, 我们将巩固对REPL和编辑器集成的理解.)
+- [X] Pareditl(结构化编辑的工具. 非常轻松地编写和修改S-表达式, 以至于括号几乎会消失.)
+*** clojure的标准库
+- [X] 条件表达式(if, when, case, cond)
+- [X] Atom(变量, 在clojure常量是常态, 变量是需要单独介绍的)
+- [X] 函数定义(定义函数和解析参数有很多种方式. 在这一章中, 我们将学习更多关于函数定义、解构以及一些有用的高阶函数的信息.)
+- [X] 序列(序列 ~seq~ 是clojure的核心抽象之一, 是clojure函数式编程的支柱之一)
+- [X] Threading macros(->> -> as-> some-> some->>)
+- [X] 和js的交互
+*** SVG画布应用
+- [X] 应用介绍
+- [X] 项目搭建
+- [X] reagent
+- [X] 路由
+- [ ] UI/CSS库
+- [ ] 状态管理
+- [ ] restful API调用
+- [ ] SVG画布
+- [ ] svg元素的增减
+- [ ] svg元素编辑器
+- [ ] 应用总结回顾
+*** 高级主题
+- [ ] 应用打包
+- [ ] 代码分离(模块化)
+- [ ] UI单元测试
+** 需要参与者
+- 学习Clojure.
+- 构建一个类似Canva的基于网页的图形编辑器.
+- cljs的后端交互.
+
+** 常见问题解答
+1. 这门课程适合谁?
+   - 这门课程适合想要探索函数式语言和概念的React和JavaScript开发者.
+2. 如果我需要帮助怎么办?
+   - 可以在学习群内提问
+3. 有任何先决条件吗?
+   - 是的. 本课程假设你对React、SPA路由和类似Redux的状态管理简单了解.

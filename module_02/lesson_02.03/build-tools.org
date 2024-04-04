@@ -1,5 +1,5 @@
 #+TITLE: 项目管理工具
-
+#+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
 
 
 在探索Clojure构建工具和包管理时, 我们了解到Clojure作为一种托管语言, 可以接入其他语言的生态系统, 这带来了多种不同生态系统的构建工具.

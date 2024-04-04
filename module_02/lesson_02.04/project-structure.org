@@ -1,6 +1,6 @@
 #+TITLE: 项目结构
 #+SLUG: language-semantics-project-structure
-#+DESCRIPTION: 已经够多的讨论了，让我们创建一个新的仓库并从零开始使用Shadow CLJS设置一个项目.
+#+DESCRIPTION: 创建一个新的仓库并从零开始使用Shadow CLJS设置一个项目.
 #+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
 
 
