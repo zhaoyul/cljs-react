@@ -1,15 +1,18 @@
 #+TITLE: 条件表达式
-#+DESCRIPTION: Clojure提供了许多控制流条件表达式, 如if-else块. 在这一章中, 我们将学习一些此类方法的API.
+#+DESCRIPTION: Clojure提供了许多控制流条件表达式.
 #+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
 
 ** 引言
 
-Clojure可以帮助我们写出简洁的代码. 支持这一事实的一个主要因素是它丰富的标准库.
-到目前为止, 我们已经学习了语法、构建工具和NREPL. 在这个模块中, 我们将在这些知识的基础上进一步了解最常用的函数.
+Clojure可以帮助我们写出简洁的代码. 重要因素之一是它丰富的标准库.
 
-我们强烈建议你跟着操作并使用内联评估尝试这些示例. 这也是练习一些Paredit命令的好时机. 我们将重用 ~first-project~ 的设置, 并为每章创建一个新的命名空间. 所以开始你的 ~watch~, 启动NODE运行时, 将你的编辑器连接到REPL. 是时候编码了.
+到目前为止, 我们已经学习了语法, 构建工具和NREPL. 在这个模块中, 我们将在这些知识的基础上进一步了解最常用的函数.
 
-在这一章中, 我们将学习各种条件函数. 代码示例位于 ~first-project.conditionals~ 命名空间中. 到现在为止, 你应该能够轻松找出持有此命名空间的文件的磁盘路径.
+我们强烈建议你跟着操作并使用repl逐一运行这些示例. 同时是练习一些Paredit命令的好时机. 我们将重用 ~first-project~ 的设置, 并为每章创建一个新的命名空间.
+
+所以开始你的 ~watch~, 启动NODE运行时, 将你的编辑器连接到REPL. 是时候编码了.
+
+在这一章中, 我们将学习各种条件函数. 代码示例位于 ~first-project.conditionals~ 命名空间中.
 
 ** 创建 ~first-project.conditionals~ 命名空间
 
@@ -23,14 +26,12 @@ touch src/first_project/conditionals.cljs
 - 如果变量为真值, 则执行的S-表达式
 - 如果变量为假值, 则执行的S-表达式
 
-
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/conditionals.cljs" src clojure :lines "3-6"
 
 
+行中注释以 ~=>~ 开始, 表示用NREPL进行内联评估的结果.
 
-内联注释以 ~=>~ 开始, 表示用NREPL进行内联评估的结果.
-
-空数据结构（列表、向量、映射和集合）是真值.  ~nil~ 是假值.
+空数据结构(列表、向量、映射和集合）是真值.  ~nil~ 是假值.
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/conditionals.cljs" src clojure :lines "8-11"
 
@@ -39,20 +40,23 @@ touch src/first_project/conditionals.cljs
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/conditionals.cljs" src clojure :lines "13-18"
 
-这个S-表达式是无效的（包装在一个 ~comment~ 中, 所以它不会干扰其他示例）. 在这种情况下, 你可以使用 ~do~ 块.  ~do~ 接受任意数量的S-表达式并按顺序执行它们：
+这个S-表达式是无效的(包装在一个 ~comment~ 中, 所以它不会干扰其他示例）. 在这种情况下, 你可以使用 ~do~ 块.  ~do~ 接受任意数量的S-表达式并按顺序执行它们：
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/conditionals.cljs" src clojure :lines "19-23"
+
 ** if-not
  ~if-not~ 类似于 ~if~ , 只是如果变量为假值则执行第一个块.
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/conditionals.cljs" src clojure :lines "26-29"
 
 
-这个函数与用 ~not~ 函数（ ~not~ 反转变量的布尔值）包装 ~if~ 中的变量相同.
+这个函数与用 ~not~ 函数(~not~ 反转变量的布尔值)包装 ~if~ 中的变量相同.
 
 ** when
-有些 ~if~ 语句可能不关心 ~else~ 子句. 例如, 你可能只想在变量为真值时渲染一个组件. 在这种情况下可以使用 ~when~ . 它接受n个参数. 第一个参数是要评估的布尔表达式. 其余的参数是要执行的表达式.
 
+有些 ~if~ 语句可能不关心 ~else~ 子句. 例如, 你可能只想在变量为真值时渲染一个组件. 在这种情况下可以使用 ~when~.
+
+~when~ 接受n个参数. 第一个参数是要评估的布尔表达式. 其余的参数是要执行的表达式.
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/conditionals.cljs" src clojure :lines "31-36"
 
@@ -65,21 +69,20 @@ touch src/first_project/conditionals.cljs
 在 ~when~ 或 ~when-not~ 不执行的情况下, 返回 ~nil~ .
 
 ** cond
-~cond~ 类似于switch/case：
+~cond~ 类似于switch/case:
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/conditionals.cljs" src clojure :lines "41-49"
 
-如果没有指定`:else`并且没有匹配的情况, 默认返回 ~nil~ .
-
+如果没有指定 ~:else~ 并且没有匹配的情况, 默认返回 ~nil~.
 
 #+begin_quote
-如果你就像它是这样写的, 并尝试评估`(test-x 91)`, 你可能会得到一个错误. 这是因为 ~test-x~ 函数没有在命名空间中定义. 你的选项是要么保存这个文件, 让 ~watch~ 再次重建, 要么在评估函数调用之前评估函数定义.
+如果你就像它是这样写的, 并尝试评估 ~(test-x 91)~, 可能会得到一个错误. 这是因为 ~test-x~ 函数没有在命名空间中定义.
+要么保存这个文件, 让 ~watch~ 再次编译(build), 要么在eval函数调用之前评估函数定义.
 #+end_quote
 
 
 ** condp
  ~condp~ 是 ~cond~ 的修改版本, 它接受一个谓词函数、一个值和一个测试值. 对于每个案例, 都会在值和测试值上调用谓词函数：
-
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/conditionals.cljs" src clojure :lines "51-60"
 
@@ -97,8 +100,8 @@ touch src/first_project/conditionals.cljs
 ** case
  ~case~ 与 ~(condp = ...~ 相同：
 
-
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/conditionals.cljs" src clojure :lines "62-68"
+
 ** 结论
 在这个模块中, 我们学习了各种条件表达式, 并且还提高了我们对NREPL和Paredit的了解.
 再次, 就像 ~Paredit~ 章节一样, 本文也仅仅是个开始. 需要反复使用才能熟悉.
