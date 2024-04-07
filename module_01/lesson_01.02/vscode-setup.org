@@ -1,0 +1,16 @@
+#+TITLE: VS Code 安装指南
+#+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
+
+* VS Code 安装指南
+在编辑器工具部分概述的包作为一个捆绑包随着 [[https://calva.io/][Calva]] 一起提供。
+对于 VS Code，你只需要安装 Calva 就可以开始了：
+1. 打开 VS Code
+2. 按 ~Ctrl/Cmd + Shift + P~
+3. 搜索 "安装扩展"
+4. 在扩展市场搜索 "Calva"
+5. 点击 ~安装~ 按钮
+6. 完成！
+
+#+CAPTION: 在 VS Code 上安装 Calva
+[[file:./public/assets/calva.png]]
+Calva 还会安装 `clj-kondo`，一个 Clojure 代码检查工具，你肯定会发现它非常有用。
