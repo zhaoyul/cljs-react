@@ -70,6 +70,9 @@ Clojure与其他语言不同, 因为它托管在现有的VM上, 并且可以利�
 - [ ] React的核心抽象(rendering, component, element, vdom)
 - [ ] React关键概念介绍(props, state, hook, context, ref, portal)
 - [ ] 值得关注的React特性(error-boundary)
+- [ ] 函数组件
+- [ ] 常用hook
+- [ ] 状态管理(redux)
 - [ ] React和cljs的融合
 *** SVG画布应用
 - [X] 应用介绍
