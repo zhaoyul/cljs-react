@@ -1,0 +1,18 @@
+#+TITLE: IntelliJ IDE 安装指南
+#+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
+
+* IntelliJ IDE 安装指南
+我们推荐使用 [[https://cursive-ide.com/][Cursive 插件]] 与 IntelliJ 进行 Clojure 开发。IntelliJ 提供了免费的非商业用途 [[https://cursive-ide.com/buy.html][许可证]] 以及付费的商业用途许可证选项。
+
+安装过程直接明了：
+
+#+CAPTION: 安装 Cursive
+[[file:./public/assets/plugins-menu.png]]
+*图片来源: [[https://cursive-ide.com/userguide/][Cursive 用户指南]]*
+
+- 在启动画面，点击 "Configure" 按钮
+- 选择 "Plugins" 选项
+- 在插件菜单中搜索 "Cursive"
+- 安装 "Ideogram Ltd." 提供的 "Cursive" 包
+
+Cursive 与编辑器工具章节中列出的所有工具一起捆绑。不需要进一步的步骤。
