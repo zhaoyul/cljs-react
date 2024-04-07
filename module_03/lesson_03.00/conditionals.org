@@ -76,7 +76,7 @@ touch src/first_project/conditionals.cljs
 如果没有指定 ~:else~ 并且没有匹配的情况, 默认返回 ~nil~.
 
 #+begin_quote
-如果你就像它是这样写的, 并尝试评估 ~(test-x 91)~, 可能会得到一个错误. 这是因为 ~test-x~ 函数没有在命名空间中定义.
+如果你就像它是这样写的, 尝试eval ~(test-x 91)~, 会得到一个错误. 这是因为 ~test-x~ 函数没有在命名空间中定义.
 要么保存这个文件, 让 ~watch~ 再次编译(build), 要么在eval函数调用之前评估函数定义.
 #+end_quote
 
