@@ -1,0 +1,112 @@
+#+TITLE: 透明互操作
+#+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
+
+Clojure 不会向开发者隐藏底层宿主语言. 它允许你绕过 Clojure 直接接触底层代码.
+本章关于互操作主要聚焦于 JavaScript 作为宿主语言, 但大多数概念也适用于其他宿主. 本章的代码示例位于 ~first-project.interop~ 命名空间中.
+** js 命名空间
+像 ~Array~, ~Date~, ~Math~, ~Object~ 这样的 JavaScript 对象可以通过 ~js/~ 命名空间访问. 你可以评估这些形式并检查它们的样子:
+
+{lang=clojure,crop-start-line=3,crop-end-line=5}
+<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+在浏览器环境中, 你可以使用 ~js/window~ 访问 ~window~ 对象.
+** 实例化对象
+要创建 JS 对象的实例, 我们可以使用 ~new~ 函数或 ~.~ 点后缀:
+
+{lang=clojure,crop-start-line=7,crop-end-line=8}
+<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+
+所有传递的参数都会传递给构造函数:
+
+{lang=clojure,crop-start-line=10,crop-end-line=11}
+<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+
+注意内联评估结果中的 ~#js~ 前缀. 这表示数据结构不是一个 CLJS 向量, 而是一个 JS 数组.
+
+形式 ~(new js/Foo p q r)~ 和 ~(js/Foo. p q r)~ 等价于 ~new Foo(p, q, r);~. 你可以使用 [Klipse](http://app.klipse.tech/) 实时检查代码的转换.
+** 调用对象方法
+可以使用 ~(.bar Foo p q r)~ 调用对象 ~Foo~ 上的方法 ~bar~. 这等同于 JS 域中的 ~Foo.bar(p, q, r)~:
+
+{lang=clojure,crop-start-line=15,crop-end-line=19}
+<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+
+~js/Date~ 对象上的 ~now~ 方法是一个静态函数, 即不需要初始化对象即可使用. ~js/Array~ 上的 ~.map~ 方法是一个实例方法, 即需要 ~Array~ 的一个实例来操作.
+
+对于类 ~Foo~ 定义的静态方法 ~bar~, 可以使用 ~(js/Foo.bar)~ 来调用. 我们可以将 ~now~ 函数调用重写为:
+
+{lang=clojure,crop-start-line=21,crop-end-line=21}
+<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+** 访问静态属性
+可以使用 ~(-. bar Foo)~ 访问对象 ~Foo~ 上的属性 ~bar~. 例如, 如果你想访问 ~js/Object~ 的静态属性 ~name~, 你可以使用:
+
+{lang=clojure,crop-start-line=24,crop-end-line=25}
+<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+
+在某些情况下, 如果静态属性深度嵌套, 你的代码可能不够易读
+
+#+begin_src clojure
+(.-value (.-target e))
+#+end_src
+
+
+在这种情况下, 我们可以使用 ~..~ 双点函数来访问属性:
+
+#+begin_src clojure
+(.. e -target -value)
+#+end_src
+
+
+你也可以直接使用 ~e.target.value~, 但 linter 可能会抱怨.
+** 域间转换
+Clojure 数据结构可以从 JS 数据结构转换过来, 反之亦然. 这在使用期望 JS 数据结构的 NPM 模块, 或者选择在 Clojure 中写 JS 以提高性能时很有帮
+
+助. 两个辅助函数 ~clj->js~ 和 ~js->clj~ 帮助进行转换:
+
+{lang=clojure,crop-start-line=27,crop-end-line=28}
+<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+
+在使用 ~js->clj~ 时, JS 对象的键在 CLJS Map 中显示为字符串. 如果你更喜欢关键字, 你可以传递一个额外的参数来关键字化键:
+
+{lang=clojure,crop-start-line=30,crop-end-line=30}
+<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+** Doto
+Java 和 JavaScript 允许你编写可变代码. 例如, 你可能有一个 UI 元素, 并可以调用一些函数来设置其属性:
+
+#+begin_src js :results output :exports both
+const rect = new Rectangle();
+rect.setHeight(40);
+rect.setWidth(80);
+rect.setPosition(32, 32);
+rect.setColor("red");
+#+end_src
+
+所有这些操作都会改变 ~rect~ 的内部状态.
+
+如果我们使用 CLJS 互操作来编写相同的代码, 我们会得到:
+
+{lang=clojure,crop-start-line=33,crop-end-line=38}
+<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+
+使用 ~doto~ 宏, 你可以像这样写相同的内容:
+
+{lang=clojure,crop-start-line=43,crop-end-line=47}
+<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+
+你可能会想知道 ~doto~ 看起来类似于线程首宏 (~->~). 然而, 这些宏是不同的, 常常会造成混淆.
+
+Clojure 本质上是不可变的. 线程宏不会改变前一步的形式. 线程宏的最终结果是最后一个形式的结果.
+
+然而, ~doto~ 会改变第一个形式. ~doto~ 宏的结果是应用了变更后的第一个形式.
+** 互操作库
+互操作语法足够强大, 可以直接访问宿主功能, 但它以可读性为代价. 虽然互操作是典型的 Clojure, 但它并不总是感觉自然. 在你大量依赖互操作的情况下, 你可以使用专门的库使互操作更加 Clojurish. 有许多库可以帮助解决问题, 但你应该了解其中的两个:
+- [funcool/promesa](https://github.com/funcool/promesa) - 与 Promise 的原生交互
+- [applied-science/js-interop](https://github.com/applied-science/js-interop) - 用于类似 Clojure 的操作 JS 数据结构的通用库
+
+注意, 你不一定需要这些库. 这些库做的一切都可以使用 Clojure 的互操作能力完成.
+** 结论
+我们学习了如何直接从 Clojure 访问宿主语言结构, 研究了数据类型转换和使互操作代码更易读的宏.
+
+在 JVM 和 JavaScript 上写过 Clojure 几年后, 我意识到要想高效, 需要同时了解宿主和 Clojure.
+
+某个时候, 你将因宿主做出的决策而达到瓶颈, 并且别无选择, 只能接触底层代码. 然而, 这不是问题, 因为 Clojure 的互操作非常有能力.
+
+这一章结束了我们对 Clojure 标准库的讨论.
