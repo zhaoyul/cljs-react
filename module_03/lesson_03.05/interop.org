@@ -6,19 +6,17 @@ Clojure 不会向开发者隐藏底层宿主语言. 它允许你绕过 Clojure �
 ** js 命名空间
 像 ~Array~, ~Date~, ~Math~, ~Object~ 这样的 JavaScript 对象可以通过 ~js/~ 命名空间访问. 你可以评估这些形式并检查它们的样子:
 
-{lang=clojure,crop-start-line=3,crop-end-line=5}
-<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/interop.cljs" src clojure :lines "3-6"
+
 在浏览器环境中, 你可以使用 ~js/window~ 访问 ~window~ 对象.
 ** 实例化对象
 要创建 JS 对象的实例, 我们可以使用 ~new~ 函数或 ~.~ 点后缀:
 
-{lang=clojure,crop-start-line=7,crop-end-line=8}
-<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/interop.cljs" src clojure :lines "7-9
 
 所有传递的参数都会传递给构造函数:
 
-{lang=clojure,crop-start-line=10,crop-end-line=11}
-<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/interop.cljs" src clojure :lines "10-12"
 
 注意内联评估结果中的 ~#js~ 前缀. 这表示数据结构不是一个 CLJS 向量, 而是一个 JS 数组.
 
@@ -33,13 +31,12 @@ Clojure 不会向开发者隐藏底层宿主语言. 它允许你绕过 Clojure �
 
 对于类 ~Foo~ 定义的静态方法 ~bar~, 可以使用 ~(js/Foo.bar)~ 来调用. 我们可以将 ~now~ 函数调用重写为:
 
-{lang=clojure,crop-start-line=21,crop-end-line=21}
-<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/interop.cljs" src clojure :lines "21-22
+
 ** 访问静态属性
 可以使用 ~(-. bar Foo)~ 访问对象 ~Foo~ 上的属性 ~bar~. 例如, 如果你想访问 ~js/Object~ 的静态属性 ~name~, 你可以使用:
 
-{lang=clojure,crop-start-line=24,crop-end-line=25}
-<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/interop.cljs" src clojure :lines "24-26"
 
 在某些情况下, 如果静态属性深度嵌套, 你的代码可能不够易读
 
@@ -61,13 +58,11 @@ Clojure 数据结构可以从 JS 数据结构转换过来, 反之亦然. 这在�
 
 助. 两个辅助函数 ~clj->js~ 和 ~js->clj~ 帮助进行转换:
 
-{lang=clojure,crop-start-line=27,crop-end-line=28}
-<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/interop.cljs" src clojure :lines "27-29"
 
 在使用 ~js->clj~ 时, JS 对象的键在 CLJS Map 中显示为字符串. 如果你更喜欢关键字, 你可以传递一个额外的参数来关键字化键:
 
-{lang=clojure,crop-start-line=30,crop-end-line=30}
-<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/interop.cljs" src clojure :lines "30-31"
 ** Doto
 Java 和 JavaScript 允许你编写可变代码. 例如, 你可能有一个 UI 元素, 并可以调用一些函数来设置其属性:
 
@@ -83,13 +78,11 @@ rect.setColor("red");
 
 如果我们使用 CLJS 互操作来编写相同的代码, 我们会得到:
 
-{lang=clojure,crop-start-line=33,crop-end-line=38}
-<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/interop.cljs" src clojure :lines "33-39"
 
 使用 ~doto~ 宏, 你可以像这样写相同的内容:
 
-{lang=clojure,crop-start-line=43,crop-end-line=47}
-<<[first-project/src/first_project/interop.cljs](./protected/source_code/first-project/src/first_project/interop.cljs)
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/interop.cljs" src clojure :lines "43-48"
 
 你可能会想知道 ~doto~ 看起来类似于线程首宏 (~->~). 然而, 这些宏是不同的, 常常会造成混淆.
 
@@ -98,8 +91,8 @@ Clojure 本质上是不可变的. 线程宏不会改变前一步的形式. 线�
 然而, ~doto~ 会改变第一个形式. ~doto~ 宏的结果是应用了变更后的第一个形式.
 ** 互操作库
 互操作语法足够强大, 可以直接访问宿主功能, 但它以可读性为代价. 虽然互操作是典型的 Clojure, 但它并不总是感觉自然. 在你大量依赖互操作的情况下, 你可以使用专门的库使互操作更加 Clojurish. 有许多库可以帮助解决问题, 但你应该了解其中的两个:
-- [funcool/promesa](https://github.com/funcool/promesa) - 与 Promise 的原生交互
-- [applied-science/js-interop](https://github.com/applied-science/js-interop) - 用于类似 Clojure 的操作 JS 数据结构的通用库
+- [[https://github.com/funcool/promesa][funcool/promesa]] - 与 Promise 的原生交互
+- [[https://github.com/applied-science/js-interop][applied-science/js-interop]] - 用于类似 Clojure 的操作 JS 数据结构的通用库
 
 注意, 你不一定需要这些库. 这些库做的一切都可以使用 Clojure 的互操作能力完成.
 ** 结论

@@ -1,4 +1,4 @@
-#+TITLE: 探讨“无语法”概念
+#+TITLE: 探讨无语法概念
 #+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
 
 ** 无语法
