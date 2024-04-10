@@ -66,14 +66,15 @@ Clojure与其他语言不同, 因为它托管在现有的VM上, 并且可以利�
 - [X] 和js的交互
 *** JavaScript和react18
 - [ ] JS生态(介绍JS的package类型, 依赖管理, Babel, Webpack, preset, etc.)
+- [ ] 前端路由(路由的类型,SPA的路由和浏览器历史)
 - [ ] React的构成和生态(react, react-dom, JSX)
-- [ ] React的核心抽象(rendering, component, element, vdom)
+- [ ] React的核心抽象(rendering, component, element, vdom.)
 - [ ] React关键概念介绍(props, state, hook, context, ref, portal)
 - [ ] 值得关注的React特性(error-boundary)
 - [ ] 函数组件
 - [ ] 常用hook
 - [ ] 状态管理(redux)
-- [ ] React和cljs的融合
+- [ ] React和cljs的融合(组件库, form表单)
 *** SVG画布应用
 - [X] 应用介绍
 - [X] 项目搭建
