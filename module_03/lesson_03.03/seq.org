@@ -3,28 +3,33 @@
 #+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
 
 
-我们一直在使用序列(或 seq)这个词，但没有给出具体的示例. 这是因为 seq 并不具体，而是一个抽象概念. 在“语法和原生数据类型”章节中，我们了解到列表、向量、集合和映射都是序列. 因为它们实现了  ~ISeq~  接口. 但这究竟意味着什么呢？
+我们一直在使用序列(或 seq)这个词, 但没有给出具体的示例. 这是因为 seq 并不具体, 而是一个抽象概念.
 
-许多语言都内置了像 ~map~ , ~reduce~, ~filter~ 等函数. 在 ES6 中，这些函数作用于数组上. 例如, ~map~ 函数接收一个数组和一个函数. 它返回一个新数组，新数组中的每个元素都是将输入数组中对应元素应用函数后的结果.
+在"语法和原生数据类型"章节中, 我们了解到列表, 向量, 集合和映射都是序列. 因为它们实现了 ~ISeq~ 接口. 但这究竟意味着什么呢?
 
-如果输入数组是 ~[1, 2, 4, 5]~ ,函数是 ~i => i + 1~, 那么在 JavaScript 中, ~map~ 的代码可能看起来像这样：
+许多语言都内置了像 ~map~, ~reduce~, ~filter~ 等函数. 在ES6中, 这些函数作用于数组上. 例如, ~map~ 函数接收一个数组和一个函数.
+
+它返回一个新数组, 新数组中的每个元素都是将输入数组中对应元素应用函数后的结果.
+
+如果输入数组是 ~[1, 2, 4, 5]~ ,函数是 ~i => i + 1~, 那么在 JavaScript 中, ~map~ 的代码可能看起来像这样:
 
 #+begin_src javascript
 [1, 2, 4, 5].map(i => i+1);
 #+end_src
 
-如果你在 JS 控制台中执行这段代码，你会看到一个输出数组 ~[2, 3, 5, 6]~.
+如果你在JS控制台中执行这段代码, 你会看到一个输出数组 ~[2, 3, 5, 6]~.
 
-但你可以在 JS 对象上执行这段代码吗？你认为以下代码会起作用吗？
+那是否可以在对象上执行这段代码呢? 以下代码会起作用吗?
 
 #+begin_src javascript
 {"name": "John Doe", "age": 29}.map(console.log)
 #+end_src
 
-如果你曾经写过 JS, 你的直觉会立即告诉你这是非法的. 为什么？因为 ~map~ 函数不是为处理对象而设计的.
+如果曾经写过JS, 直觉会立即告诉你这是非法的. 因为 ~map~ 函数不是为处理对象而设计的.
 
 ** 在seq抽象之上编程
-Clojure 允许你在所有原生数据结构上运行相同的 ~map~ 函数. 这是因为 ~map~ (和其他序列函数)不像 JavaScript 那样绑定到数据类型上.
+
+Clojure允许在所有原生数据结构上运行相同的 ~map~ 函数. 这是因为 ~map~ (和其他序列函数)不像 JavaScript 那样绑定到数据类型上.
 相反, 它绑定到序列的抽象概念上. 所有序列函数都可以在遵循序列规则的任何数据结构上调用. 为了形成一个心智模型, 可以将序列视为列表.
 
 本章中的示例代码位于 ~first-project.seq~ 命名空间中. 我们不会询问你它的磁盘路径, 并假设你已经知道了.
@@ -41,26 +46,26 @@ Clojure 非常擅长切割和整理数据. 这背后的一个原因是它丰富�
 
 这里是我们将要遇到的操作子集.
 *** map
-~map~ 函数接受一个序列, 并通过对每个元素应用一个函数来转换它. 它的签名是：`(map fn-to-apply & sequences)`. 注意我们在签名中使用了 `&`. 如果你还记得“函数定义”章节的内容, 这意味着  ~map~  是变参的. 我们一会儿再讨论这个！
+~map~ 函数接受一个序列, 并通过对每个元素应用一个函数来转换它. 它的签名是: `(map fn-to-apply & sequences)`. 注意我们在签名中使用了 `&`. 如果你还记得" 函数定义" 章节的内容, 这意味着  ~map~  是变参的. 我们一会儿再讨论这个!
 
-让我们尝试一个简单的 ~map~, 通过 ~inc~ 函数增加 0 到 9 的所有数字：
+让我们尝试一个简单的 ~map~, 通过 ~inc~ 函数增加 0 到 9 的所有数字:
 
 {lang=clojure,crop-start-line=15,crop-end-line=16}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
  ~inc~  函数是 Clojure
 
- 核心的一部分, 但如果你想做些其他事情, 比如平方所有数字？很简单, 你定义自己的平方函数并将其传递给  ~map~ ：
+ 核心的一部分, 但如果你想做些其他事情, 比如平方所有数字? 很简单, 你定义自己的平方函数并将其传递给  ~map~ :
 
 {lang=clojure,crop-start-line=18,crop-end-line=21}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
-我们可以通过使用匿名函数而不是命名空间定义来使我们的表达式更加简洁：
+我们可以通过使用匿名函数而不是命名空间定义来使我们的表达式更加简洁:
 
 {lang=clojure,crop-start-line=23,crop-end-line=25}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
-我们甚至可以进一步通过使用匿名函数的简写语法：
+我们甚至可以进一步通过使用匿名函数的简写语法:
 
 {lang=clojure,crop-start-line=27,crop-end-line=27}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
@@ -81,21 +86,21 @@ Clojure 非常擅长切割和整理数据. 这背后的一个原因是它丰富�
 #+end_quote
 
 *** 在多个序列上使用 map
-~map~ 函数是变参的, 即可以同时在多个序列上运行：
+~map~ 函数是变参的, 即可以同时在多个序列上运行:
 
 {lang=clojure,crop-start-line=35,crop-end-line=35}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
 在传递多个序列的情况下, 函数被应用于每个序列的第 n 个元素.
 
-在上面的示例中, 我们传递了两个大小相等的整数序列, 从 0 到 9. 函数 ~+~ 被应用于两个序列的第一个元素, 以获得结果序列的第一个元素：
+在上面的示例中, 我们传递了两个大小相等的整数序列, 从 0 到 9. 函数 ~+~ 被应用于两个序列的第一个元素, 以获得结果序列的第一个元素:
 #+begin_src clojure
 (apply + [0 0])
 ;; 或者
 (+ 0 0)
 #+end_src
 
-然后再次应用于两个序列的第二个元素, 依此类推. 这就引出了一个问题, 当序列长度不等时会发生什么？利用 REPL 的一个好处是你可以直接评估代码并自己检查！你会发现较长的序列在末尾被截断：
+然后再次应用于两个序列的第二个元素, 依此类推. 这就引出了一个问题, 当序列长度不等时会发生什么? 利用 REPL 的一个好处是你可以直接评估代码并自己检查! 你会发现较长的序列在末尾被截断:
 
 {lang=clojure,crop-start-line=37,crop-end-line=37}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
@@ -108,7 +113,7 @@ Clojure 非常擅长切割和整理数据. 这背后的一个原因是它丰富�
 *** reduce
 ~reduce~ 函数是 OG 序列操作. 它的签名是: ~(reduce f init-val sequence)~ 或 ~(reduce f sequence)~. 如果
 
-没有提供初始值, 累加器的初始值假定为 ~nil~. 输入 ~f~ 是一个函数, 接受两个参数：一个累加器和下一个元素.
+没有提供初始值, 累加器的初始值假定为 ~nil~. 输入 ~f~ 是一个函数, 接受两个参数: 一个累加器和下一个元素.
 
 {lang=clojure,crop-start-line=46,crop-end-line=46}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
@@ -119,59 +124,59 @@ Clojure 非常擅长切割和整理数据. 这背后的一个原因是它丰富�
 - 在下一次传递中, 函数 ~+~ 被应用于上一个累加器(0)和下一个元素(1). 结果值(1)成为下一个累加器.
 - 这个过程一直持续到序列耗尽.
 
-我们迄今为止学习过的所有解构概念都适用于 ~reduce~ (以及所有其他序列操作). 将概念组合在一起使我们的表达式简洁. 例如, 你可以像这样找到用户列表的平均 karma 分数：
+我们迄今为止学习过的所有解构概念都适用于 ~reduce~ (以及所有其他序列操作). 将概念组合在一起使我们的表达式简洁. 例如, 你可以像这样找到用户列表的平均 karma 分数:
 
 {lang=clojure,crop-start-line=48,crop-end-line=56}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
-想让它更简洁吗？使用内联函数的简写定义:
+想让它更简洁吗? 使用内联函数的简写定义:
 
 {lang=clojure,crop-start-line=58,crop-end-line=59}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
 我们觉得现在是时候指出, 我们的目标不应该是使用最少的代码行. 尤其是以牺牲可读性为代价. Clojure 是富有表现力的, 但使用它的方式由你自己决定.
 *** keep
-~keep~ 函数与 ~filter~ 类似, 具有相同的签名. 如果 ~(f item)~ 不是 ~nil~, 它返回所提供的纯函数的值：
+~keep~ 函数与 ~filter~ 类似, 具有相同的签名. 如果 ~(f item)~ 不是 ~nil~, 它返回所提供的纯函数的值:
 
 {lang=clojure,crop-start-line=61,crop-end-line=61}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
 ~keep~ 与 ~filter~ 的不同之处在于, ~filter~ 根据谓词从输入中选择元素, 而 ~keep~ 返回输入函数的值.
 
-你还记得关键字可以用作从映射中提取值的函数吗？
+你还记得关键字可以用作从映射中提取值的函数吗?
 #+begin_src clojure
 (:a {:a 1 :b 2}) ;; => 1
 #+end_src
-这是一个好时机指出, 映射也可以用作函数, 效果相同：
+这是一个好时机指出, 映射也可以用作函数, 效果相同:
 #+begin_src clojure
 ({:a 1 :b 2} :a) ;; => 1
 #+end_src
 
-将这个映射作为函数与  ~keep~  结合使用, 你可以从映射中提取值列表：
+将这个映射作为函数与  ~keep~  结合使用, 你可以从映射中提取值列表:
 
 {lang=clojure,crop-start-line=62,crop-end-line=62}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
 我们可以做的序列操作的排列组合不断增加.
 *** remove
-~remove~  函数是  ~filter~  的反函数, 具有相同的签名. 它返回所有谓词函数返回假的输入序列中的值：
+~remove~  函数是  ~filter~  的反函数, 具有相同的签名. 它返回所有谓词函数返回假的输入序列中的值:
 
 {lang=clojure,crop-start-line=66,crop-end-line=66}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 *** into
-由于序列是抽象的, 输入数据结构可能与输出数据结构不同. 例如, 如果有一个城市及其相应温度的哈希映射, 你想找出所有温度低于 30 度的城市, 你可能会使用  ~filter~ ：
+由于序列是抽象的, 输入数据结构可能与输出数据结构不同. 例如, 如果有一个城市及其相应温度的哈希映射, 你想找出所有温度低于 30 度的城市, 你可能会使用  ~filter~ :
 
 {lang=clojure,crop-start-line=72,crop-end-line=85}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
-注意我们传入了一个哈希映射, 但收到了一个列表.  ~into~  函数帮助你转换数据结构. 它可以以多种方式使用, 但我们感兴趣的签名是：`(into to from)`.
+注意我们传入了一个哈希映射, 但收到了一个列表.  ~into~  函数帮助你转换数据结构. 它可以以多种方式使用, 但我们感兴趣的签名是: `(into to from)`.
 
-它在序列操作中特别有用. 要从上面的列表中返回一个映射, 我们可以指定一个空映射作为  ~to~  参数：
+它在序列操作中特别有用. 要从上面的列表中返回一个映射, 我们可以指定一个空映射作为  ~to~  参数:
 
 {lang=clojure,crop-start-line=87,crop-end-line=89}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
-~into~ 通过将序列的每个元素 ~conj~ (结合)到 ~to~ 参数中工作. 在上面的示例中, 我们将形状转换为映射, 进行了以下操作：
+~into~ 通过将序列的每个元素 ~conj~ (结合)到 ~to~ 参数中工作. 在上面的示例中, 我们将形状转换为映射, 进行了以下操作:
 - 将空映射 ~{}~ 与第一个元素 ~[:c 24]~ ~conj~ (结合), 结果为 ~{:c 24}~
 
 {lang=clojure,crop-start-line=91,crop-end-line=91}
@@ -179,29 +184,29 @@ Clojure 非常擅长切割和整理数据. 这背后的一个原因是它丰富�
 - 将结果映射与第二个元素 ~[:d 19]~  ~conj~ (结合), 结果为 ~{:c 24, :d 19}~
 -  ~conj~ (结合)下一个元素(恰好是最后一个), 并返回最终结果.
 
-由于  ~conj~  为序列定义, 所以相同的程序也适用于向量！你认为它会适用于集合吗？如果我们试图将 ~temp-under-30~ 转换为集合, 你认为会发生什么？
+由于  ~conj~  为序列定义, 所以相同的程序也适用于向量! 你认为它会适用于集合吗? 如果我们试图将 ~temp-under-30~ 转换为集合, 你认为会发生什么?
 
 {lang=clojure,crop-start-line=94,crop-end-line=94}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
 ### group-by
-~group-by~ 函数接受一个函数和一个序列：~(group-by f seq)~, 并返回一个映射. 该函数被应用于集合的每个元素. 结果映射的键是当 f 被应用于所有元素时返回的值集. 映射的值是结果匹配键的元素向量.
+~group-by~ 函数接受一个函数和一个序列: ~(group-by f seq)~, 并返回一个映射. 该函数被应用于集合的每个元素. 结果映射的键是当 f 被应用于所有元素时返回的值集. 映射的值是结果匹配键的元素向量.
 
-用一个示例更容易理解：
+用一个示例更容易理解:
 
 {lang=clojure,crop-start-line=98,crop-end-line=98}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
 将 ~even?~ 函数应用于 0 到 9 的整数. 当 f 被应用于每个元素时, 结果集是 ~{true false}~. 相应的元素作为结果集的值出现.
 
-由于关键字可以用作带有哈希映射的函数, 你可以按键对映射序列进行分组：
+由于关键字可以用作带有哈希映射的函数, 你可以按键对映射序列进行分组:
 
 {lang=clojure,crop-start-line=100,crop-end-line=106}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
 在上面的示例中, 我们对所有年龄相同的用户进行了分组.
 *** partition
-分区将集合转换为 n 个组. 以最简单的形式, 它的签名是：~(partition n collection)~：
+分区将集合转换为 n 个组. 以最简单的形式, 它的签名是: ~(partition n collection)~:
 
 {lang=clojure,crop-start-line=110,crop-end-line=110}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
@@ -210,39 +215,39 @@ Clojure 非常擅长切割和整理数据. 这背后的一个原因是它丰富�
 我们交替使用序列和集合这两个术语.
 :::
 
-在上面的示例中, 如果集合中的元素数量使得无法创建完整的分区, 则多余的元素被截断：
+在上面的示例中, 如果集合中的元素数量使得无法创建完整的分区, 则多余的元素被截断:
 
 {lang=clojure,crop-start-line=112,crop-end-line=112}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
 分区还允许步长, 签名
 
-是：~(partition size step seq)~. 定义了步长后, 每隔  ~step~  就选取  ~size~  元素的集合：
+是: ~(partition size step seq)~. 定义了步长后, 每隔  ~step~  就选取  ~size~  元素的集合:
 
 {lang=clojure,crop-start-line=114,crop-end-line=114}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
 每四步选取两个元素.
 
-我们还可以使用填充集合来完成分区并防止截断. 使用填充的签名是：~(partition size step pad-seq seq)~：
+我们还可以使用填充集合来完成分区并防止截断. 使用填充的签名是: ~(partition size step pad-seq seq)~:
 
 {lang=clojure,crop-start-line=116, crop-end-line=117}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
 如果定义了填充序列, 也可能返回不等的分区.
 *** sort
-排序根据比较操作符对集合进行重新排列. 其中一个签名是：~(sort seq)~. 它按升序对给定序列进行排序：
+排序根据比较操作符对集合进行重新排列. 其中一个签名是: ~(sort seq)~. 它按升序对给定序列进行排序:
 
 {lang=clojure,crop-start-line=121,crop-end-line=121}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
- ~sort~  也可以接受一个  ~comparator~  作为第一个参数：
+ ~sort~  也可以接受一个  ~comparator~  作为第一个参数:
 
 {lang=clojure,crop-start-line=122,crop-end-line=122}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 *** juxt
 
- ~juxt~  函数是一个荣誉提及, 因为一个名为 Juxt 的公司帮助我在 Clojure 旅程中取得了进步. 函数的签名是：~(juxt & fns)~. 它接受任意数量的函数, 并返回一个高阶函数. 当这个函数被一些参数调用时, 结果是所有函数应用于参数后的向量：
+ ~juxt~  函数是一个荣誉提及, 因为一个名为 Juxt 的公司帮助我在 Clojure 旅程中取得了进步. 函数的签名是: ~(juxt & fns)~. 它接受任意数量的函数, 并返回一个高阶函数. 当这个函数被一些参数调用时, 结果是所有函数应用于参数后的向量:
 
 {lang=clojure,crop-start-line=123,crop-end-line=123}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
@@ -250,18 +255,18 @@ Clojure 非常擅长切割和整理数据. 这背后的一个原因是它丰富�
 函数 ~+~ 和 ~*~ 被应用于参数 ~1 2 3 4 5~, 结果作为向量返回.
 
 ## Transducers
-你可以在不传递集合的情况下使用  ~filter~, ~map~ 和 ~reduce~ 函数, 比如：
+你可以在不传递集合的情况下使用  ~filter~, ~map~ 和 ~reduce~ 函数, 比如:
 #+begin_src clojure
 (filter even?)
 #+end_src
 这创建了一个 transducer, 这是一种与序列一起工作的替代(有时更高效)方式. 我们不会在本课程中涵盖 transducers, 因为它们将抽象提升到了更高的层次.
 
-我们可以为 transducers 形成一个心智模型. 如果你有一个序列并希望对其应用多个过滤器, 你可以重复调用  ~filter~  函数：
+我们可以为 transducers 形成一个心智模型. 如果你有一个序列并希望对其应用多个过滤器, 你可以重复调用  ~filter~  函数:
 #+begin_src clojure
 (filter f3 (filter f2 (filter f1 seq)))
 #+end_src
 
-这导致序列的重复遍历. 首先对  ~seq~  应用  ~f1~ , 然后对上一个过滤器的结果应用  ~f2~ , 依此类推. 如果我们可以组合所有过滤器并一起应用它们, 这个操作可以更加高效：
+这导致序列的重复遍历. 首先对  ~seq~  应用  ~f1~ , 然后对上一个过滤器的结果应用  ~f2~ , 依此类推. 如果我们可以组合所有过滤器并一起应用它们, 这个操作可以更加高效:
 #+begin_src clojure
 (filter (comp f1 f2 f3) seq)
 #+end_src
@@ -270,19 +275,19 @@ Clojure 非常擅长切割和整理数据. 这背后的一个原因是它丰富�
 ** 序列操作是惰性的
 大多数时候, 序列操作不会被评估, 直到需要结果的时候. 这使得你的程序更加高效, 也让你可以像处理有限序列一样处理无限序列.
 
-如果我们打印一个列表的所有元素但返回另一个值, 我们会发现序列从未被实现：
+如果我们打印一个列表的所有元素但返回另一个值, 我们会发现序列从未被实现:
 
 {lang=clojure,crop-start-line=127,crop-end-line=131}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
 如果你检查你的控制台, 你会发现当你调用函数时没有数字被打印. 这是
 
-因为函数的结果与  ~map~  无关. 这有时可能是一个问题, 并可以使用  ~doall~  函数缓解.  ~doall~  强制评估惰性序列：
+因为函数的结果与  ~map~  无关. 这有时可能是一个问题, 并可以使用  ~doall~  函数缓解.  ~doall~  强制评估惰性序列:
 
 {lang=clojure,crop-start-line=133,crop-end-line=137}
 <<[first-project/src/first_project/seq.cljs](./protected/source_code/first-project/src/first_project/seq.cljs)
 
-你会注意到数字在你的运行时 ie. 运行中的 Node 脚本终端被打印出来：
+你会注意到数字在你的运行时 ie. 运行中的 Node 脚本终端被打印出来:
 #+begin_src bash
 1
 2
