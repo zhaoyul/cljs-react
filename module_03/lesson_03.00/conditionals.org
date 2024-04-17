@@ -8,9 +8,9 @@ Clojure可以帮助我们写出简洁的代码. 重要因素之一是它丰富�
 
 到目前为止, 我们已经学习了语法, 构建工具和NREPL. 在这个模块中, 我们将在这些知识的基础上进一步了解最常用的函数.
 
-我们强烈建议你跟着操作并使用repl逐一运行这些示例. 同时是练习一些Paredit命令的好时机. 我们将重用 ~first-project~ 的设置, 并为每章创建一个新的命名空间.
+请跟着操作并使用repl逐一运行这些示例. 同时是练习一些Paredit命令的好时机. 我们将重用 ~first-project~ 的设置, 并为每章创建一个新的命名空间.
 
-所以开始你的 ~watch~, 启动NODE运行时, 将你的编辑器连接到REPL. 是时候编码了.
+开始 ~watch~, 启动NODE运行时, 编辑器连接到REPL. 是时候编码了.
 
 在这一章中, 我们将学习各种条件函数. 代码示例位于 ~first-project.conditionals~ 命名空间中.
 
@@ -35,12 +35,12 @@ touch src/first_project/conditionals.cljs
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/conditionals.cljs" src clojure :lines "8-11"
 
-你可能会发现自己处于一个位置, 需要在 ~if~ 或 ~else~ 块中执行多个S-表达式. 例如, 不仅仅是返回一个字符串, 如果你想要打印并返回它, 会怎样：
+可能会发现自己处于一个位置, 需要在 ~if~ 或 ~else~ 块中执行多个S-表达式. 例如, 不仅仅是返回一个字符串, 如果想要打印并返回它, 会怎样：
 
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/conditionals.cljs" src clojure :lines "13-18"
 
-这个S-表达式是无效的(包装在一个 ~comment~ 中, 所以它不会干扰其他示例）. 在这种情况下, 你可以使用 ~do~ 块.  ~do~ 接受任意数量的S-表达式并按顺序执行它们：
+这个S-表达式是无效的(包装在一个 ~comment~ 中, 所以它不会干扰其他示例）. 在这种情况下, 可以使用 ~do~ 块.  ~do~ 接受任意数量的S-表达式并按顺序执行它们：
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/conditionals.cljs" src clojure :lines "19-23"
 
@@ -54,7 +54,7 @@ touch src/first_project/conditionals.cljs
 
 ** when
 
-有些 ~if~ 语句可能不关心 ~else~ 子句. 例如, 你可能只想在变量为真值时渲染一个组件. 在这种情况下可以使用 ~when~.
+有些 ~if~ 语句可能不关心 ~else~ 子句. 例如, 可能只想在变量为真值时渲染一个组件. 在这种情况下可以使用 ~when~.
 
 ~when~ 接受n个参数. 第一个参数是要评估的布尔表达式. 其余的参数是要执行的表达式.
 
@@ -76,7 +76,7 @@ touch src/first_project/conditionals.cljs
 如果没有指定 ~:else~ 并且没有匹配的情况, 默认返回 ~nil~.
 
 #+begin_quote
-如果你就像它是这样写的, 尝试eval ~(test-x 91)~, 会得到一个错误. 这是因为 ~test-x~ 函数没有在命名空间中定义.
+如果就像它是这样写的, 尝试eval ~(test-x 91)~, 会得到一个错误. 这是因为 ~test-x~ 函数没有在命名空间中定义.
 要么保存这个文件, 让 ~watch~ 再次编译(build), 要么在eval函数调用之前评估函数定义.
 #+end_quote
 
@@ -89,11 +89,11 @@ touch src/first_project/conditionals.cljs
 上面示例的 ~cond~ 版本将是：
 
 #+begin_src clojure
-(defn test-y [y]
-  (cond
-    (= 5 y) "y is 5"
-        (= 6 y) "y is 6"
-        :else "y is neither 5 or 6"))
+  (defn test-y [y]
+    (cond
+      (= 5 y) "y is 5"
+      (= 6 y) "y is 6"
+      :else "y is neither 5 or 6"))
 #+end_src
 
 
