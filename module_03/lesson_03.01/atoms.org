@@ -9,7 +9,7 @@
 
 在像JVM这样的真正多线程环境中, 原子保证了跨线程的原子更新.
 
-本章中的示例位于 ~first-project.atoms~ 命名空间. 我们建议您创建此文件并跟随操作！
+本章中的示例位于 ~first-project.atoms~ 命名空间. 我们建议创建此文件并跟随操作！
 
 ** 创建一个原子
 使用 ~atom~ 函数可以创建新的原子. 第一个参数是初始值. 这个初始值可以是任何东西：数字、映射、函数、其他原子等.
@@ -20,12 +20,12 @@
 -  ~:validator~ ：在更新原子的值之前运行的谓词, 如果返回false, 则不更新值
 -  ~:metadata-map~ ：保存原子元数据的键值对
 
-如果您内联评估一个原子, 您会看到它的初始值和包裹对象. 这可能会根据底层语言而有所不同. 对于JavaScript, 它看起来像：
+如果eval一个原子, 会看到它的初始值和包裹对象. 这可能会根据底层语言而有所不同. 对于JavaScript, 它看起来像：
 
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/atoms.cljs" src clojure :lines "11-12"
 ** 获取原子的当前值
-Clojure原子是Clojure引用（reference）的一个实例. 我们不会深入讨论refs. 但您可以将ref视为原子的基类.
+Clojure原子是Clojure引用（reference）的一个实例. 我们不会深入讨论refs. 但可以将ref视为原子的基类.
 
 要获取原子（或任何引用）的当前值, 我们可以使用 ~deref~ 方法. 有两种方式进行 ~deref~ ：
 
@@ -36,7 +36,7 @@ Clojure原子是Clojure引用（reference）的一个实例. 我们不会深入�
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/atoms.cljs" src clojure :lines "14-16"
 
 ** 重置当前值
-如果您想在不关心初始值的情况下更新值, 可以使用 ~reset!~ 函数. 这个函数接受两个参数, 要重置的原子及其新值.
+如果想在不关心初始值的情况下更新值, 可以使用 ~reset!~ 函数. 这个函数接受两个参数, 要重置的原子及其新值.
 
 以感叹号结尾的函数通常表示不安全或不纯的操作. 感叹号通常被读作“bang”.
 
@@ -58,26 +58,26 @@ Clojure原子是Clojure引用（reference）的一个实例. 我们不会深入�
 
  ~conj~ 和 ~pop~ 分别向向量添加一个元素和移除最后一个元素.  ~assoc~ （或关联）向映射添加一个键值对.
 
-您还记得您在 ~语法和原生数据类型~ 章节中首次遇到这些函数的情况吗？您还记得这些操作的不可变性吗？
+还记得在 ~语法和原生数据类型~ 章节中首次遇到这些函数的情况吗？还记得这些操作的不可变性吗？
 
  ~(assoc {} :a :b)~ 不会更新原始映射, 而是返回一个新的. 原子帮助我们安全地变更状态.
 
 ** 观察变化
-您可以添加一个钩子来观察对原子状态所做的更改. 在您希望在状态改变后运行不纯的操作的情况下, 这很有用. 例如, 您可能想要在原子更新时记录更改或重新渲染UI.
+可以添加一个钩子来观察对原子状态所做的更改. 在希望在状态改变后运行不纯的操作的情况下, 这很有用. 例如, 可能想要在原子更新时记录更改或重新渲染UI.
 
  ~add-watch~ 函数接受一个原子, 一个标识符关键字和一个状态变化时要调用的函数.
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/atoms.cljs" src clojure :lines "37-41"
 当执行 ~reset!~ 函数时, 在运行时, 即运行中的Node脚本中打印了一条日志语句：
 
-![打印的日志语句](./public/assets/log-statement.png)
+[[file:public/assets/log-statement.png]]
 
 可以使用 ~remove-watch~ 函数移除一个观察者：
 
 #+INCLUDE: "./protected/source_code/first-project/src/first_project/atoms.cljs" src clojure :lines "42-43"
 
 ** 使用 ~let~ 绑定的局部原子
-到目前为止, 我们使用的所有原子都是使用 ~def~ 宏定义的. 使用 ~def~ 生成的变量在那个命名空间中是全局的.  ~let~ 函数允许您定义局部变量：
+到目前为止, 我们使用的所有原子都是使用 ~def~ 宏定义的. 使用 ~def~ 生成的变量在那个命名空间中是全局的.  ~let~ 函数允许定义局部变量：
 
 #+begin_src clojure
 (let [a (atom 0)
@@ -87,8 +87,7 @@ Clojure原子是Clojure引用（reference）的一个实例. 我们不会深入�
   a)
 #+end_src
 
-
- ~let~ 定义也称为“let绑定”.  ~let~ 需要一个元素数量为偶数的向量. 在 ~let~ 绑定中定义的变量只在 ~let~ 闭包内可用.  ~let~ 列表的最后一个元素是返回值. 在上面的示例中, 原子 ~a~ 将在评估时被返回.
+~let~ 定义也称为“let绑定”.  ~let~ 需要一个元素数量为偶数的向量. 在 ~let~ 绑定中定义的变量只在 ~let~ 闭包内可用.  ~let~ 列表的最后一个元素是返回值. 在上面的示例中, 原子 ~a~ 将在评估时被返回.
 
 使用 ~let~ 绑定不仅限于原子. 任何有效的Clojure数据类型/结构都可以在 ~let~ 绑定中定义.
 
