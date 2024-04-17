@@ -1,0 +1,89 @@
+#+TITLE: 箭头宏(threading macros)
+#+SLUG: stdlib-threading-macros
+#+DESCRIPTION: 嵌套调用可能难以管理. 箭头宏可以帮助我们掌控这一点. 在本章中, 我们将理解箭头宏的概念, 并学习三种常用的版本.
+#+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
+
+
+#+begin_quote
+术语 ~thread~ 与并行编程无关. Thread 是线性操作系列的表达, 就像线上的珍珠.
+#+end_quote
+
+随着你的函数增加复杂性, 代码的可读性会受到影响. 假设你有一个带有各种属性的书籍列表, 你想找出与每本无限制书籍相关的书籍数量:
+
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/threading_macros.cljs" src clojure :lines "3-13"
+
+这样的调用可能会失控. 如果我们想要所有相关书籍的出版年份怎么办?
+
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/threading_macros.cljs" src clojure :lines "15-21"
+
+我们执行了以下操作:
+- 过滤所有受限制的书籍
+- 在每个 ~:related~ 向量的元素上调用 ~publish-year-by-id~ 函数
+
+** *后序箭头宏 (~->>~)*
+后序箭头宏使嵌套函数调用更易于表达. 函数调用:
+
+#+BEGIN_SRC clojure
+(f (g l (h p q x)))
+#+END_SRC
+
+可以表达为:
+
+#+BEGIN_SRC clojure
+(->> x
+     (h p q)
+     (g l)
+     f)
+#+END_SRC
+
+在后序宏展开中, 一个表达式的结果作为下一个表达式的最后一个参数传递. 让我们使用后序宏重写我们的 ~publish-year-by-id~:
+
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/threading_macros.cljs" src clojure :lines "22-28"
+
+注意我们是如何使用 ~first~ 函数和 ~:publish-year~ 关键字而不需要括号. 你可以根据需要添加括号, 但 Clojure 在传递可调用形式时假定存在括号. 大多数开发者发现使用箭头宏的形式更具可读性.
+
+让我们也使用后序宏重写另一个操作:
+
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/threading_macros.cljs" src clojure :lines "29-35"
+
+它仍然不如 ~pub-year-by-id~ 函数可读. 在实际应用中, 你会经常遇到这样的操作. 如果是我, 我会把内联函数提取到一个命名空间的函数中:
+
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/threading_macros.cljs" src clojure :lines "36-47"
+
+我们将操作分解为更小的函数, 这些函数更易于维护和推理.
+
+** *宏展开 (~macroexpand~)*
+使用宏没有性能成本, 因为宏本质上是重写你的代码. 你可以使用 ~macroexpand~ 函数检查你的代码将如何被重写:
+
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/threading_macros.cljs" src clojure :lines "48-51"
+
+带有字符串和 ~js*~ 的部分只是为了适应 JavaScript 的转换. 但你可以看到 ~+~ 是如何与 1 和 2 一起调用的.
+
+注意表达式开始前的单引号 ~'~. 引号标记告诉 Clojure 将此表单视为列表而不是函数调用.
+
+** *前序箭头宏 (~->~)*
+前序箭头宏与后序宏类似, 除了结果作为第一个参数传递给下一个表单, 因此称为前序:
+
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/threading_macros.cljs" src clojure :lines "54-57"
+
+这里我们计算与我们藏书中第一本书相关的书籍总数.
+
+后序宏适用于序列操作, 因为它们通常接受序列作为最后一个参数.
+
+前序宏通常用于从深层嵌套的映射中提取值:
+
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/threading_macros.cljs" src clojure :lines "59-60"
+
+**  *as-> 宏*
+你可能会遇到一些情况, 其中一些函数在管道中接受参数的位置不在第一位或最后一位. ~as->~ 宏可以用来定义参数的位置. 它通过将步骤的结果绑定到一个变量, 然后手动将该变量传递到正确的位置来工作:
+
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/threading_macros.cljs" src clojure :lines "62-65"
+
+这里我们将输出绑定到变量 ~x~ 并在正确的位置传递它.
+
+绑定也可以是解构的:
+
+#+INCLUDE: "./protected/source_code/first-project/src/first_project/threading_macros.cljs" src clojure :lines "66-68"
+
+**  *结论*
+在这一章中我们学习了如何使用箭头宏来提高代码的可读性. 我们介绍了三种最常用的宏, 并且学习了宏展开. 这三种宏应该足以应对本课程, 但如果你发现自己想要更多, 我们还有 ~cond->~, ~cond->>~, ~some->~ 和 ~some->>~. 你可以在官方文档中了解更多.
