@@ -1,0 +1,43 @@
+#+TITLE: 概述
+#+SLUG: tc-overview
+#+DESCRIPTION: 我们将实现的组件和概念的演练以及最终应用程序的视频演示。
+#+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
+
+
+[Canva](https://canva.com) 是一个在线图形和视频编辑平台。它由 [Melanie Perkins 于 2007 年创建](https://www.canva.com/en_in/story/)。
+
+我们选择 Canva 是因为基于网络的图形编辑器所呈现的挑战。它需要与 DOM、HTML Canvas 和 JavaScript 交互，除了传统的前端任务如路由和状态管理之外。我们即将构建的应用程序无法完全接近真正的 Canva 编辑器。但我们会学习构建各种 JS 应用程序所需的所有技术。
+
+** *Tinycanva*
+
+Tinycanva 应用程序将是一个单页面应用程序，支持：
+
+- 身份验证：使用 Firebase Auth
+- 授权：私有和公共路由
+- CRUD 用户界面：使用 Firebase 数据库
+- 图形编辑器：使用 FabricJS，一个 HTML5 Canvas 的封装器
+
+在实现方面，我们将使用 Reagent，一个 CLJS 封装器为 React。我们将学习如何使用反应性原子（Reagent 内置的本地状态解决方案）和 Reframe（一个为 ClojureScript 设计的 flux 库）来本地和全局管理状态。对于路由，我们将使用 React Router。
+
+这种混合展示了 Clojure 在各种条件下（如使用 JS 库和与 React 集成）的力量。在构建这个应用程序的过程中，我们将更多地了解 Clojure 的开发工作流程、它的 API、Paredit 和 REPL。
+
+在最后，我们将学习关于代码分割、生产包和单元测试的高级概念。
+
+** *屏幕截图*
+
+这里是你可以预期的一些预览：
+
+- 登录屏幕
+[[./public/assets/login.png]]
+
+- 仪表板
+[[./public/assets/dashboard.png]]
+
+- 图形编辑器
+[[./public/assets/graphics.png]]
+
+- 图形控制面板
+[[./public/assets/graphics-control.png]]
+
+** *结论*
+到本模块结束时，你将拥有一个功能完备的应用程序。你将具有实际经验了解事物是如何结合在一起的。我们还希望本模块中构建的应用程序将成为你自己的 Clojure 项目的起点。
