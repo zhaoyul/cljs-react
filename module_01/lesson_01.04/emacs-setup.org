@@ -1,6 +1,6 @@
 #+TITLE: Emacs设置
 #+SLUG: getting-started-emacs-setup
-#+DESCRIPTION: 为Clojure开发设置Emacs。
+#+DESCRIPTION: 为Clojure开发设置Emacs.
 #+isPublicLesson: true
 #+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
 
@@ -11,17 +11,17 @@ Emacs是最受欢迎的Clojure编辑器. 其背后的一个原因是它的LISPy�
 有多种方式来安装这些包.
 
 1. copy 同事的配置文件
-2. 最简单设置，推荐[[https://github.com/purcell/emacs.d][purcell的.emacs.d配置]]
+2. 最简单设置, 推荐[[https://github.com/purcell/emacs.d][purcell的.emacs.d配置]]
 3. 从头开始, 以下是从头开始的步骤.
 
-我们可以安装所需的包. 您可能需要将此配置添加到`init.el`文件中. 要让Clojure与Emacs协同工作，我们需要以下包：
+我们可以安装所需的包. 您可能需要将此配置添加到`init.el`文件中. 要让Clojure与Emacs协同工作, 我们需要以下包:
 
 - [[https://www.flycheck.org/en/latest/][flycheck]]
 #+begin_src elisp
 (use-package flycheck
   :init (global-flycheck-mode))
 
-;; 首先安装包，然后在`clojure-mode'加载时安装检查器
+;; 首先安装包, 然后在`clojure-mode'加载时安装检查器
 (use-package flycheck-clj-kondo)
 #+end_src
 
