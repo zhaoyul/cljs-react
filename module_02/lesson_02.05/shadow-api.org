@@ -1,9 +1,10 @@
 #+TITLE: Shadow CLJS API
 #+SLUG: language-semantics-shadow-cljs-api
-#+DESCRIPTION: 学习如何构建并运行它. 我们还将探索一些其他构建目标，并使用Reagent（一个ClojureScript包装器）探索Shadow和React.
+#+DESCRIPTION: 学习如何构建并运行它. 我们还将探索一些其他构建目标, 并使用Reagent(一个ClojureScript包装器)探索Shadow和React.
 #+SETUPFILE: https://gitee.com/zhaoyuKevin/org-theme/raw/master/org/theme-readtheorg.setup
 
-Shadow提供了许多助手来编译和开发你的应用, 但我们现在只需要了解三种方法：
+Shadow提供了许多选项来编译和开发应用, 但我们现在只需要了解三种方法:
+
 - ~Compile~
 - ~Watch~
 - ~Release~
@@ -27,7 +28,7 @@ GCP与Clojure无关. GCP中的"Closure"一词可能有点令人困惑. 这不是
 ** 开始 ~watch~
 我们准备开始我们的第一个构建. 我们已经设置了配置, 安装了Shadow, 并创建了一个命名空间. 我们的 ~main~ 函数打印"Hello World".
 
-要开始Shadow ~watch~, 我们需要使用构建目标发出 ~watch~ 命令：
+要开始Shadow ~watch~, 我们需要使用构建目标发出 ~watch~ 命令:
 
 #+begin_src bash
 yarn shadow-cljs watch :script
@@ -37,10 +38,10 @@ yarn shadow-cljs watch :script
 ~:script~ 是我们在Shadow配置中定义的构建目标的名称.
 
 #+begin_quote
-当你第一次运行 ~watch~ 命令时, Shadow将安装所需的依赖.
+当第一次运行 ~watch~ 命令时, Shadow将安装所需的依赖.
 #+end_quote
 
-你的输出将类似于：
+输出将类似于:
 #+begin_src
 $ yarn shadow-cljs watch :script
 yarn run v1.21.1
@@ -54,7 +55,7 @@ Retrieving thheller/shadow-cljsjs/0.0.21/shadow-cljsjs-0.0.21.jar from https://r
 shadow-cljs - dependencies updated
 #+end_src
 
-如果一切顺利, 你应该看到一些日志声明构建完成并且NREPL服务器正在运行：
+如果一切顺利, 应该看到一些日志声明构建完成并且NREPL服务器正在运行:
 
 #+begin_src
 shadow-cljs - server version: 2.10.15 running at http://localhost:9630
@@ -68,9 +69,11 @@ shadow-cljs - watching build :script
 Shadow编译了76个文件, 如配置中定义的, 在端口9000上启动了nREPL, 并且还在端口9630上启动了一个服务器. 我们已经了解了nREPL. 这个其他服务器提供了一个基于web的仪表板, 提供了所有构建和运行时的概览. 它还提供了一个接口到Shadow Inspect, 这是一个类似于Chrome Dev. Tools的智能日志系统.
 
 ** 运行脚本
-此时, 你的ClojureScript代码被编译成了 ~build/node-script/core.js~ 中的Node脚本. 你可以检查这个代码, 因为它是JavaScript, 但它可能没有多大意义. ~:node-script~ 目标将所有内容捆绑到一个文件中, 这使得在可读性上的代价下易于分发.
+此时, ClojureScript代码被编译成了 ~build/node-script/core.js~ 中的Node脚本. 可以查看这个代码, 因为它是JavaScript, 但它可能没有多大意义.
 
-然而, 我们可以简单地运行编译后的Node脚本：
+~:node-script~ 目标将所有内容捆绑到一个文件中, 这虽然牺牲了可读性但十分容易于分发部署.
+
+接下来我们可以简单地运行编译后的Node脚本:
 
 #+begin_src bash
 # 在first-project目录中
@@ -79,63 +82,66 @@ node build/node-script/core.js
 shadow-cljs - #3 ready!
 #+end_src
 
-你可能会注意到进程没有终止. 这是因为Shadow在 ~watch~ 模式下允许一些钩子, 每次你做出更改时都可以在Node环境中执行你的代码. 现在, 你可以简单地按 ~Ctrl+C~ 或 ~Cmd+C~ 退出.
+注意到进程没有终止. 这是因为Shadow在 ~watch~ 模式下允许一些钩子, 每次做出更改时都可以在Node环境中执行的代码. 现在, 可以简单地按 ~Ctrl+C~ 或 ~Cmd+C~ 退出.
 
-尝试将 ~core.cljs~ 中的消息更改为"Hello World 2". 你应该注意到, 当你保存该文件时, Shadow会重新构建脚本.
+尝试将 ~core.cljs~ 中的消息更改为"Hello World 2". 应该注意到, 当保存该文件时, Shadow会重新构建脚本.
 
-** 使脚本准备好生产
+** 执行编译之后的js
+
 到目前为止, 我们使用 ~watch~ 构建的脚本是为开发环境准备的.
 
-~release~ 命令以生产模式构建脚本. 它对JavaScript输出应用高级优化, 压缩和混淆. 要构建我们的 ~:script~ 目标, 请运行以下命令：
+~release~ 命令以生产模式构建脚本. 它对JavaScript输出应用高级优化, 压缩和混淆. 要构建我们的 ~:script~ 目标, 请运行以下命令:
 
 #+begin_src bash
 yarn shadow-cljs release :script
 #+end_src
 
-如果你再次在Node中运行脚本, 进程将终止, 因为脚本是为生产使用打包的：
+如果再次在Node中运行脚本, 进程将终止, 因为脚本是为生产使用打包的:
 
 #+begin_src bash
 node build/node-script/core.js
 "Hello World 2"
 #+end_src
 
-## 设置发布和观察快捷方式
-有时, 键入整个构建命令可能感觉繁琐. 我的做法是将这些命令添加到NPM脚本中, 这样它们就更容易使用了.
+** 设置release和watch快捷方式
+有时, 键入整个构建命令可能感觉繁琐. 标准做法是将这些命令添加到NPM脚本中, 它们就更容易使用.
 
-我们可以将以下快捷方式添加到`package.json`的`scripts`配置中：
+我们可以将以下快捷方式添加到`package.json`的`scripts`配置中:
 
 #+begin_src json
 {lang=javascript,crop-start-line=10,crop-end-line=13}
 <<[first-project/package.json](./protected/source_code/first-project/package.json)
 #+end_src
 
-现在, 我们可以使用 ~yarn w:script~ 而不是 ~yarn shadow-cljs watch :script~. 随意尝试适合你的别名.
+现在, 我们可以使用 ~yarn w:script~ 而不是 ~yarn shadow-cljs watch :script~. 随意尝试适合的别名.
 
 ** 自动化脚手架
-使用Shadow设置一个新的ClojureScript项目很简单, 但不容易. 你需要创建配置, 目录结构, 并设置一些构建目标.
+使用Shadow设置一个新的ClojureScript项目很简单, 但不容易. 需要创建配置, 目录结构, 并设置一些构建目标.
 
 [[https://github.com/filipesilva/create-cljs-app][create-cljs-app]]可以帮助简化这个过程. 这个工具在范围上类似于 ~create-react-app~.
 
-要使用该工具创建一个新项目, 你可以这样做：
+要使用该工具创建一个新项目, 可以这样做:
 
 #+begin_src bash
 yarn create cljs-app second-project
 # 或 npx create-cljs-app second-project
 #+end_src
 
-这将为你创建一个Shadow配置, 一个NPM配置, 安装依赖, 并为你的代码和测试设置一个目录结构. 它还将安装一个linter并为运行, 打包和测试你的应用程序设置NPM脚本别名.
+这将创建一个Shadow配置, 一个NPM配置, 安装依赖, 并为代码和测试设置一个目录结构. 它还将安装一个linter并为运行, 打包和测试应用程序设置NPM脚本别名.
 
 在 ~create-cljs-app~ 创建的默认配置中, 项目针对 ~:browser~ 并包含Reagent, 这是React的CLJS包装器.
 
 到目前为止, 我们的示例使用了 ~:node-script~ 目标. 另一个显著的区别是使用 ~public~ 目录而不是 ~resources~.
 
-一旦你理解了生态系统并希望快速引导项目, 这是一个很好的开始方式.
+我们应该已经理解了cljs+js的生态系统并可以快速开始一个项目.
 
 ** 针对浏览器
 
-使用 ~create-cljs-app~ 生成的应用程序是一个在浏览器中运行的React应用程序. 它在底层使用了[[https://reagent-project.github.io/][Reagent]]并设置了一个基本的SPA. 如果你在新创建的 ~second-project~ 目录中运行 ~yarn start~, Shadow将为你启动一个端口为3000的开发服务器和一个端口为3333的nREPL(假设你没有更改任何配置).
+使用 ~create-cljs-app~ 生成的应用程序是一个在浏览器中运行的React应用程序. 它在底层使用了[[https://reagent-project.github.io/][Reagent]]并设置了一个基本的SPA.
 
-如果你检查 ~http://localhost:3000~, 你会看到一个简单的React组件. 以下配置负责编译应用程序以在浏览器中运行：
+在新创建的 ~second-project~ 目录中运行 ~yarn start~, Shadow将启动一个端口为3000的开发服务器和一个端口为3333的nREPL(假设没有更改任何配置).
+
+打开 ~http://localhost:3000~, 会看到一个简单的React组件. 以下配置负责编译应用程序以在浏览器中运行:
 
 #+begin_src clojure
 {:app {:asset-path "/js"
@@ -155,7 +161,9 @@ yarn create cljs-app second-project
 *** 资产路径
 这对键值对定义了编译资源相对于Web服务器的位置.
 
-例如, 你的Web服务器被配置为从`/root/example-com/public`目录在https://example.com上提供静态网站. 并且你将代码编译到`public/js`目录, 那么你的资产路径相对于Web服务器是`/js`, 即如果一个名为`public/index.html`的文件需要包含一个编译后的脚本, 那么它可以在`http://example.com/js/main.js`(或简单地`/js/main.js`)中这样做.
+例如, Web服务器被配置为从`/root/example-com/public`目录在https://example.com上提供静态网站.
+
+并且将代码编译到`public/js`目录, 那么资产路径相对于Web服务器是`/js`, 即如果一个名为`public/index.html`的文件需要包含一个编译后的脚本, 那么它可以在`http://example.com/js/main.js`(或简单地`/js/main.js`)中这样做.
 
 *** 模块
 模块配置是需要产生的输出的映射. 这有助于代码分割.
@@ -164,28 +172,28 @@ yarn create cljs-app second-project
 
 ~:init-fn~ 选项指定了一个在模块加载时应该运行的命名空间限定函数. 例如, 在React应用程序中, 我们可能希望在应用程序加载时调用 ~render~.
 
-随着你的应用程序规模的增长, 你可以将输出分割成多个模块. 模块也可以相互依赖. Shadow将计算依赖图, 并尝试将大多数代码推到边缘.
+随着应用程序规模的增长, 可以将输出分割成多个模块. 模块也可以相互依赖. Shadow将计算依赖图, 并尝试将大多数代码推到边缘.
 
 通常的做法是有一个 ~:shared~ 模块来加载基本依赖, 一个 ~:main~ 模块来初始化应用程序, 以及多个特定于领域的模块, 如 ~:login~, ~:dashboard~ 等.
 
-模块配置将随着我们使用它而变得更容易掌握. 现在, 只需将其视为将你的代码放入不同篮子中的选项.
+模块配置将随着我们使用它而变得更容易掌握. 现在, 只需将其视为将代码放入不同篮子中的选项.
 
 *** 在index.html中包含main
-基于浏览器的JavaScript需要一些HTML. 它可能不是从配置中明显, 但如果你检查 ~create-cljs-app~ 生成的 ~public~ 文件夹, 你会发现一个 ~index.html~ 文件.
+基于浏览器的JavaScript需要一些HTML. 它可能不是从配置中明显, 但如果检查 ~create-cljs-app~ 生成的 ~public~ 文件夹, 会发现一个 ~index.html~ 文件.
 
 这个文件包含了由 ~:main~ 模块配置生成的 ~main.js~ 文件.
 
 ** 开发服务器
 注意在端口3000上运行的HTTP服务器, 提供了编译的应用程序. 这要归功于 ~:dev-http~ Shadow配置.
 
-~:dev-http~ 接受一个端口和根目录, 并以`index.html`为入口点提供该目录的内容. 这将整个过程连接在一个循环中：
+~:dev-http~ 接受一个端口和根目录, 并以`index.html`为入口点提供该目录的内容. 这将整个过程连接在一个循环中:
 
-- 你开始使用 ~yarn start~ 开始watch ~:app~ 这个目标
+- 开始使用 ~yarn start~ 开始watch ~:app~ 这个目标
 - Shadow将CLJS代码编译为JavaScript并输出到 ~public/js~ 目录
 - 开发服务器在端口3000上提供这个目录
-- 你打开浏览器检查输出
-- 当你做出更改时, Shadow会重新编译你的应用程序
-- 它还会热重载！
+- 打开浏览器检查输出
+- 当做出更改时, Shadow会重新编译应用程序
+- 它还会热重载!
 
 ** 结论
 在这个模块中, 我们运行了我们的第一个应用程序并了解了Shadow的基本API. 我们学习了如何使用 ~create-shadow-cljs~ 应用程序自动化引导过程.
