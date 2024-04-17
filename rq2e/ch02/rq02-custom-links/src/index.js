@@ -18,6 +18,7 @@ class Link extends React.Component {
 const link1 = React.createElement(Link);
 const link2 = React.createElement(Link);
 const link3 = React.createElement(Link);
-const group = React.createElement(React.Fragment, null, link1, link2, link3);
+const link4 = React.createElement(Link);
+const group = React.createElement(React.Fragment, null, link1, link2, link3, link4);
 const domElement = document.getElementById("root");
 ReactDOM.createRoot(domElement).render(group);
