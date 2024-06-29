@@ -5,8 +5,8 @@
 
 Shadow提供了许多选项来编译和开发应用, 但我们现在只需要了解三种方法:
 
-- ~Compile~
 - ~Watch~
+- ~Compile~
 - ~Release~
 
 ~Compile~ 和 ~watch~ 在范围上类似. 它们都根据构建目标将ClojureScript代码转换为JavaScript代码. 唯一的区别是, 每次源路径上的文件改变时, ~watch~ 都会重新编译.

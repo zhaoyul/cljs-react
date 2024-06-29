@@ -9,6 +9,7 @@
 我们使用最多的是lein和shadow-cljs
 
 ** Leiningen
+
 Leiningen是Clojure最古老且最成熟的构建工具之一, 它不仅仅是一个构建工具, 还允许我们定义依赖和项目特定的任务. 你可以将Leiningen视为Clojure生态系统中的NPM或Yarn.
 
 Leiningen的优势包括：
@@ -25,7 +26,7 @@ Boot在作用范围上与Leiningen相似, 但有一个关键区别：Boot只运�
 
 Boot的缺点是配置冗长, 对于较小的项目来说不是很有帮助.
 
-### Deps CLI
+** Deps CLI
 Deps CLI是官方的构建工具, 旨在成为Leiningen和Boot的替代品. Leiningen和Boot是包含电池的构建工具, 而Deps CLI更多是DIY. Deps CLI允许你控制.jar文件的生产, 从Maven加载依赖, 并定义应用的各种目标（测试、生产、预发布等）.
 
 它更加多功能, 但需要你付出更多的努力.

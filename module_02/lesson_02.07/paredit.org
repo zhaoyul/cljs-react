@@ -6,30 +6,32 @@
 
 * Paredit
 
-Paredit帮助进行结构化编辑. 用非术语来说, 它是一个辅助编写S-表达式的工具. 由于Paredit依赖于使用的编辑器, 我们将在本章中只覆盖核心特性.
+Paredit帮助进行结构化编辑. 是一个辅助编写S表达式的工具. emacs/vscode/intellij都支持paredit, 本章避免深入细节, 在本章中只覆盖核心特性.
 
-本章的呈现风格受到了[[http://danmidwood.com/][Dan Midwood]] 的 [[http://danmidwood.com/content/2014/11/21/animated-paredit.html][Animated guide to Paredit]] 的启发.
+本章的内容风格受到了[[http://danmidwood.com/][Dan Midwood]] 的 [[http://danmidwood.com/content/2014/11/21/animated-paredit.html][Animated guide to Paredit]] 的启发.
 
 Paredit是Lisper工具箱中不可或缺的一部分. 本章是课程中可以反复参考的内容.
 
-我们在 ~Getting Started~ 部分安装了Paredit. VSCode不需要单独安装Paredit, 因为它随Calva一起提供.
+我们在系统环境搭建部分介绍了如何在emacs中安装paredit. VSCode不需要单独安装Paredit, 随Calva一起提供.
 
 我们将重新使用 ~first-project.core~ 命名空间来测试各种Paredit特性.
 
 ** 括号成对平衡
+
 当打开一个括号时, 可能已经观察到Paredit会自动添加关闭括号.
 当删除一个括号时, 关闭部分也会自动删除.
 
 [[file:public/assets/balancing.gif]]
 
 ** 删除保护
+
 Paredit通过只允许删除S-表达式的叶节点来防止意外删除括号.
 如果尝试删除一个父节点, 光标只会向后移动.
 
 
 [[file:public/assets/delete-protection.gif]]
 
-注意当我在第13行有子节点的表单上按`backspace`时, 光标只是向后移动.
+注意当我在第13行有子节点的表单上按 ~backspace~ 时, 光标只是向后移动.
 而第15行没有任何子节点(即子表单)的表单在删除时被删除.
 
 当表达式变得更复杂时, 删除保护会非常有帮助. 一开始, 可能会觉得有点烦人, 但很快就会习惯.
@@ -108,10 +110,13 @@ Wrap用括号或引号包围一个S-表达式.
 | Emacs   | Artur Malabarba   | [文章](https://endlessparentheses.com/a-few-paredit-keys-that-take-over-the-world.html) |
 
 ** 结论
-在这一章中, 我们学习了Paredit和结构化编辑. 很有可能会觉得它很烦人.
-Paredit是所有Lisper最终都会欣赏的工具. 只需给它一些时间, 让它沉淀.
-一旦理解了基础知识, 代码将感觉更简洁, 更易于编辑.
 
-假设一个人可以一次性学会所有这些命令是不合理的, 事实是不需要.
+在这一章中, 我们学习了Paredit和结构化编辑. 一开始不习惯是正常的.
+假以时日, Paredit是所有Lisper都会爱上的工具. 给自己一些时间.
+理解基础知识之后, 代码将感觉更简洁, 更易于编辑.
+
+一次性学会所有这些命令是不合理的, 事实是不需要.
+
 将本章作为参考, 需要时再回来查看. 随着时间的推移, 这些命令将进入肌肉记忆.
-我们建议先关注Slurp和Barf. 我们还建议你重新绑定你的快捷键到emacs的方式, 使Paredit更符合人体工程学.
+
+建议先关注Slurp和Barf. 重新绑定你的快捷键到emacs的方式, 使Paredit更符合人体工程学.
