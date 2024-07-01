@@ -9,13 +9,17 @@ REPL代表 ~R~ (源代码), ~E~ (代码), ~P~ 打印(结果)和 ~L~ (循环).
 
 根据官方Clojure文档的说法, [[https://clojure.org/guides/repl/guidelines_for_repl_aided_development][REPL是程序的用户界面]].
 
-Clojure是一种托管语言. 在我们的demo中, ClojureScript托管在JavaScript上(Node或浏览器). 这意味着在给定的时刻, 有两套代码可用: 我们编写的CLJS代码和构建工具产生的JS代码.
+Clojure是一种托管语言. 在我们的demo中, ClojureScript托管在JavaScript上(Node或浏览器).
 
-为了测试我们的代码, 我们需要运行JS版本. 但是修改是对CLJS版本进行的. REPL提供了一个双向桥接这两个领域的桥梁. 在repl中我们通过执行clojure代码, 控制JavaScript运行时中的执行.
+这意味着在给定的时刻, 有两套代码存在: 我们编写的CLJS代码和构建工具产生的JS代码.
+
+为了测试我们的代码, 我们需要运行JS. 但是修改是对CLJS进行的.
+
+REPL提供了一个双向桥接这两个领域的桥梁. 在repl中我们通过执行clojure代码, 控制JavaScript运行时中的执行.
 
 ** Eval演示
 
-eval一个小众概念. 我们先看最终的样子, 然后再自下而上构建概念. 我们将使用 ~first-project~ 和Shadow进行这个演示:
+EVAL一个小众概念. 我们先看最终的样子, 然后再自下而上构建概念. 我们将使用 ~first-project~ 和 ~Shadow-cljs~ 进行这个演示:
 
 [[file:public/assets/repl-demo.gif]]
 
