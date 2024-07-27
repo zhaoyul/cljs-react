@@ -30,14 +30,14 @@ Tinycanva配置位于=app.config=命名空间中. 它有两个环境: =dev= 和 
 
 =#shadow/env= 帮助我们读取环境变量, 而 =:closure-defines= 将值设置为任何命名空间中的变量. 请注意拼写 =closure=. 这不是拼写错误, 我们并不是指 =clojure=.
 
-[comment]: <GM: define it AS app.core?>
-=:closure-defines=是Google的Closure Compiler的属性, ClojureScript使用它将CLJS编译为JS. 让我们更新我们的=shadow-cljs.edn=以读取此环境变量并将其定义为=app.core=:
+=:closure-defines= 是Google的Closure Compiler的属性, ClojureScript使用它将CLJS编译为JS. 让我们更新我们的 =shadow-cljs.edn= 以读取此环境变量并将其定义为 =app.core=:
+
 
 #+BEGIN_SRC clojure :crop-start-line 2 :crop-end-line 8
 <<[./tinycanvas/shadow-cljs.edn](./protected/source_code/tinycanva/shadow-cljs.edn)
 #+END_SRC
 
-=:closure-defines=行基本上要求Shadow定义环境变量=app.core/app-env=, 其值为环境变量=APP_ENV=.
+=:closure-defines=行基本上要求Shadow定义环境变量=app.core/app-env=, 其值为环境变量 =APP_ENV=.
 
 现在可以在 =app.core= 中使用 =goog-define= 读取此变量:
 
@@ -59,27 +59,39 @@ Tinycanva配置位于=app.config=命名空间中. 它有两个环境: =dev= 和 
 
 现在, 如果您关闭 =watch= 进程并在终端中执行 =yarn build=, 应用将以生产模式编译到 =public= 文件夹中:
 
-```bash
+
+#+begin_src shell :results pp :exports both
 $ yarn build
 yarn run v1.21.1
 $ yarn clean && APP_ENV=prod shadow-cljs release app
-$ rimraf public/js
+$ rm -rf public/js
 
 ;; 日志和警告
 
 [:app] 构建完成. (325个文件, 263个编译, 0个警告, 101.92秒)
 ✨ 完成时间为136.18秒.
+
 此时，我们的shadow应用是一个静态前端应用，可以使用任何服务器提供。让我们尝试运行它：
 
 
 $ cd public
-\$ npx serve
+$ npx serve
 # 或 python3 -m http.server
-您会注意到应用以"prod"配置运行。
+注意到应用以"prod"配置运行。
+#+end_src
+
+此时，我们的shadow应用是一个静态前端应用，可以使用任何服务器提供。让我们尝试运行它：
+
+
+#+begin_src shell
+$ cd public
+$ npx serve
+#+end_src
+# 或 python3 -m http.server
 
 App在“prod”模式下运行
 
-=/public=文件夹现在可以部署到任何提供商（Netlify、Vercel、Surge、S3），使您的应用可以访问互联网。
+=/public= 文件夹现在可以部署到任何地方.
 
 *** 结论
 在本章中，我们学习了如何使用环境变量应用特定于环境的配置。我们还学习了如何为部署打包CLJS应用。
